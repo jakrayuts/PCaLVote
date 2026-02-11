@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard คะแนนแยกฝ่าย</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 min-h-screen p-6">
+
+<h1 class="text-3xl font-bold text-center mb-10 text-gray-700">
+🏆 Dashboard คะแนนรวม 5 กรรมการ
+</h1>
+
+<div class="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<h2 class="text-xl font-semibold text-pink-500 mb-4 text-center">👩 ฝ่ายหญิง</h2>
+<canvas id="femaleChart"></canvas>
+<h3 class="mt-6 font-bold text-center">Top 3</h3>
+<div id="femaleTop" class="space-y-2 mt-3 text-center"></div>
+</div>
+
+<div class="bg-white rounded-2xl shadow-lg p-6">
+<h2 class="text-xl font-semibold text-blue-500 mb-4 text-center">👨 ฝ่ายชาย</h2>
+<canvas id="maleChart"></canvas>
+<h3 class="mt-6 font-bold text-center">Top 3</h3>
+<div id="maleTop" class="space-y-2 mt-3 text-center"></div>
+</div>
+
+</div>
+
+<script>
+
+const sheetURL = "https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec"; // ใส่ URL Apps Script
+
+let femaleChart, maleChart;
+
+async function loadDashboard(){
+
+try {
+
+const res = await fetch(sheetURL + "?t=" + new Date().getTime());
+const data = await res.json();
+
+let femaleScores = {};
+let maleScores = {};
+
+data.forEach(row => {
+
+let gender = row.group;
+let contestant = row.contestant;
+let total = parseInt(row.total) || 0;
+
+if(gender === "female"){
+if(!femaleScores[contestant]) femaleScores[contestant] = 0;
+femaleScores[contestant] += total;
+}
+
+if(gender === "male"){
+if(!maleScores[contestant]) maleScores[contestant] = 0;
+maleScores[contestant] += total;
+}
+
+});
+
+updateSection(femaleScores,"femaleChart","femaleTop","#f472b6");
+updateSection(maleScores,"maleChart","maleTop","#60a5fa");
+
+} catch(err){
+console.log("ERROR:", err);
+}
+
+}
+
+function updateSection(scores,chartId,topId,color){
+
+let sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
+let labels = sorted.map(x=>"หมายเลข "+x[0]);
+let values = sorted.map(x=>x[1]);
+
+let medals=["🥇","🥈","🥉"];
+let topHTML="";
+
+sorted.slice(0,3).forEach((item,index)=>{
+topHTML+=`
+<div class="bg-gray-50 p-2 rounded-lg shadow text-gray-700">
+${medals[index]} หมายเลข ${item[0]} — ${item[1]} คะแนน
+</div>`;
+});
+
+document.getElementById(topId).innerHTML = topHTML;
+
+let existingChart = chartId==="femaleChart"?femaleChart:maleChart;
+
+if(existingChart){
+existingChart.data.labels = labels;
+existingChart.data.datasets[0].data = values;
+existingChart.update();
+}else{
+let newChart = new Chart(document.getElementById(chartId),{
+type:'bar',
+data:{
+labels:labels,
+datasets:[{
+label:'คะแนนรวม',
+data:values,
+backgroundColor:color,
+borderRadius:8
+}]
+},
+options:{
+responsive:true,
+plugins:{legend:{display:false}},
+scales:{y:{beginAtZero:true}}
+}
+}
+);
+
+if(chartId==="femaleChart") femaleChart=newChart;
+if(chartId==="maleChart") maleChart=newChart;
+}
+
+}
+
+loadDashboard();
+setInterval(loadDashboard,5000);
+
+</script>
+
+</body>
+</html>
