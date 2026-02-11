@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Judge Scoring - Back to School</title>
+
+<!-- Tailwind CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body {
+  font-family: 'Prompt', sans-serif;
+}
+.fade-in {
+  animation: fadeIn 0.6s ease-in-out;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+</style>
+
+</head>
+<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 min-h-screen p-6 text-gray-800">
+
+<div class="max-w-5xl mx-auto bg-white rounded-3xl shadow-2xl p-8 fade-in">
+
+  <!-- Header -->
+  <div class="text-center mb-8">
+    <h1 class="text-4xl font-bold text-blue-900">🏫 Back to School Contest</h1>
+    <p class="text-gray-500 mt-2">ระบบให้คะแนนกรรมการ (ฝ่ายหญิง)</p>
+  </div>
+
+  <!-- Judge & Contestant -->
+  <div class="grid md:grid-cols-2 gap-6 mb-8">
+    <div>
+      <label class="block font-semibold mb-2">เลือกกรรมการ</label>
+      <select class="w-full p-3 rounded-xl border shadow-sm focus:ring-2 focus:ring-blue-400">
+        <option>กรรมการคนที่ 1</option>
+        <option>กรรมการคนที่ 2</option>
+        <option>กรรมการคนที่ 3</option>
+        <option>กรรมการคนที่ 4</option>
+        <option>กรรมการคนที่ 5</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block font-semibold mb-2">เลือกผู้เข้าแข่งขัน</label>
+      <select class="w-full p-3 rounded-xl border shadow-sm focus:ring-2 focus:ring-blue-400">
+        <option>หมายเลข 1</option>
+        <option>หมายเลข 2</option>
+        <option>หมายเลข 3</option>
+        <option>หมายเลข 4</option>
+        <option>หมายเลข 5</option>
+        <option>หมายเลข 6</option>
+        <option>หมายเลข 7</option>
+        <option>หมายเลข 8</option>
+        <option>หมายเลข 9</option>
+        <option>หมายเลข 10</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Score Sections -->
+  <div class="space-y-5">
+
+    <!-- Category Card -->
+    <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="20">
+      <div class="flex justify-between items-center">
+        <span class="font-semibold">1. แต่งกายตาม Theme "Back to School"</span>
+        <span class="text-sm text-gray-500">เต็ม 20 คะแนน</span>
+      </div>
+      <input type="number" min="0" max="20"
+        class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+    </div>
+
+    <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="20">
+      <div class="flex justify-between items-center">
+        <span class="font-semibold">2. ความคิดสร้างสรรค์</span>
+        <span class="text-sm text-gray-500">เต็ม 20 คะแนน</span>
+      </div>
+      <input type="number" min="0" max="20"
+        class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+    </div>
+
+    <div class="bg-blue-50 p-4 rounded-xl font-semibold text-blue-800">
+      3. การนำเสนอ
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+
+      <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="15">
+        <span class="font-semibold">3.1 ความโดดเด่น</span>
+        <input type="number" min="0" max="15"
+          class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+      </div>
+
+      <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="15">
+        <span class="font-semibold">3.2 ความสามารถพิเศษ</span>
+        <input type="number" min="0" max="15"
+          class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+      </div>
+
+      <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="15">
+        <span class="font-semibold">3.3 บุคลิกภาพ</span>
+        <input type="number" min="0" max="15"
+          class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+      </div>
+
+      <div class="score-item bg-gray-50 p-5 rounded-xl shadow-sm border hover:shadow-md transition" data-max="15">
+        <span class="font-semibold">3.4 ความมั่นใจ / การเดิน / ตอบคำถาม</span>
+        <input type="number" min="0" max="15"
+          class="score-input mt-3 w-full p-3 rounded-lg border focus:ring-2 focus:ring-blue-400 text-center text-lg">
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Total Score -->
+  <div class="mt-10 bg-yellow-100 rounded-2xl p-6 shadow-inner">
+    <div class="flex justify-between items-center">
+      <span class="text-xl font-bold text-yellow-800">🎯 คะแนนรวม</span>
+      <span id="totalScore" class="text-4xl font-bold text-blue-900">0</span>
+    </div>
+
+    <div class="w-full bg-gray-300 rounded-full h-5 mt-4 overflow-hidden">
+      <div id="progressBar"
+        class="h-5 bg-gradient-to-r from-green-400 to-green-600 w-0 transition-all duration-500">
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="text-center mt-8">
+    <button onclick="saveScore()"
+      class="px-10 py-3 bg-blue-700 text-white rounded-2xl text-lg font-semibold shadow-lg hover:scale-105 transition transform duration-200">
+      ✔ บันทึกคะแนน
+    </button>
+  </div>
+
+</div>
+
+<!-- Script -->
+<script>
+const inputs = document.querySelectorAll('.score-input');
+const totalEl = document.getElementById('totalScore');
+const progressBar = document.getElementById('progressBar');
+
+function calculateTotal() {
+  let total = 0;
+
+  inputs.forEach(input => {
+    let value = Number(input.value) || 0;
+    let max = Number(input.max);
+
+    if (value > max) {
+      input.value = max;
+      value = max;
+    }
+
+    if (value < 0) {
+      input.value = 0;
+      value = 0;
+    }
+
+    total += value;
+  });
+
+  totalEl.textContent = total;
+  progressBar.style.width = Math.min(total, 100) + "%";
+}
+
+inputs.forEach(input => {
+  input.addEventListener('input', calculateTotal);
+});
+
+function saveScore() {
+  calculateTotal();
+  const total = totalEl.textContent;
+
+  if (total == 0) {
+    alert("กรุณากรอกคะแนนก่อนบันทึก");
+    return;
+  }
+
+  alert("บันทึกคะแนนเรียบร้อยแล้ว\nคะแนนรวม: " + total + " คะแนน");
+}
+</script>
+
+</body>
+</html>
