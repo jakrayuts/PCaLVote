@@ -146,7 +146,7 @@ console.log("ERROR:", err);
 function updateSection(scores,chartId,topId,color,theme){
 
 let sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
-let labels = sorted.map(x=>"หมายเลข "+x[0]);
+let labels = sorted.map(x=>""+x[0]);
 let values = sorted.map(x=>x[1]);
 
 let medals=["🥇","🥈","🥉"];
@@ -160,7 +160,7 @@ let highlight = index===0
 
 topHTML+=`
 <div class="${highlight} p-4 rounded-xl shadow flex justify-between items-center transition hover:scale-105">
-  <div class="text-lg font-semibold">${medals[index]} หมายเลข ${item[0]}</div>
+  <div class="text-lg font-semibold">${medals[index]} ${item[0]}</div>
   <div class="font-bold text-lg">${item[1]} คะแนน</div>
 </div>`;
 });
@@ -208,5 +208,6 @@ setInterval(loadDashboard,5000);
 </body>
 
 </html>
+
 
 
