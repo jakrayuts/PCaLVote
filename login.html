@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body class="bg-pink-100 flex items-center justify-center h-screen">
+
+<div class="bg-white p-6 rounded-xl shadow-lg w-80">
+  <h2 class="text-xl font-bold mb-4 text-center">Judge Login</h2>
+
+  <input id="username" placeholder="Username"
+    class="w-full mb-3 px-3 py-2 border rounded-lg">
+
+  <input id="password" type="password" placeholder="Password"
+    class="w-full mb-4 px-3 py-2 border rounded-lg">
+
+  <button onclick="login()"
+    class="w-full bg-pink-400 text-white py-2 rounded-lg">
+    Login
+  </button>
+</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
+
+function login() {
+
+  const username = document.getElementById("username").value;
+  const password = document.getElementById("password").value;
+
+  fetch(`${API}?action=login&username=${username}&password=${password}`)
+  .then(res => res.json())
+  .then(data => {
+
+    if (data.status == "success") {
+
+      localStorage.setItem("judge", data.judge);
+      window.location.href = "index.html";
+
+    } else {
+
+      Swal.fire({
+        icon: 'error',
+        title: 'Login ไม่สำเร็จ'
+      });
+    }
+  });
+}
+</script>
+</body>
+</html>
