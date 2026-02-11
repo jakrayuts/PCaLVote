@@ -142,7 +142,31 @@ document.getElementById("judgeNameTab").innerText = judgeName;
 
 function logout(){
   localStorage.removeItem("judge");
-  window.location.href="login.html";
+  window.location.href="index.html";
+}
+
+function onlyNumber(evt){
+let charCode = evt.which ? evt.which : evt.keyCode;
+
+// อนุญาตเฉพาะ 0-9
+if(charCode < 48 || charCode > 57){
+return false;
+}
+return true;
+}
+
+function validateInput(input){
+
+// 🔒 กันตัวอักษรทุกชนิด (กัน paste)
+input.value = input.value.replace(/[^0-9]/g, '');
+
+let max=parseInt(input.getAttribute("max"));
+let value=parseInt(input.value)||0;
+
+if(value>max) input.value=max;
+if(value<0) input.value=0;
+
+calculateTotal();
 }
 
 let currentGroup="";
