@@ -207,26 +207,30 @@ function renderCards(scores,bodyId,color){
   .slice(0,5);
 
   if(arr.length === 0){
-    document.getElementById(bodyId).innerHTML = "<div class='text-center text-gray-400'>ไม่มีข้อมูล</div>";
+    document.getElementById(bodyId).innerHTML =
+    "<div class='text-center text-gray-400'>ไม่มีข้อมูล</div>";
     return;
   }
 
-  let maxScore = arr[0][1]; // คะแนนอันดับ 1
-  let medals=["🥇","🥈","🥉","🏅","🏅"];
+  let maxScore = arr[0][1];
+  let medals=["👑","🥈","🥉","🏅","🏅"];
   let html="";
 
   arr.forEach((item,index)=>{
 
     let percent = Math.round((item[1]/maxScore)*100);
 
-    let topStyle = "";
-    if(index === 0){
+    let topStyle="";
+    let crownGlow="";
+
+    if(index===0){
       topStyle = `
-        scale-105 bg-${color}-100 border-2 border-${color}-400
-        shadow-lg animate-pulse
+        scale-105 bg-yellow-100 border-2 border-yellow-400
+        shadow-2xl animate-pulse
       `;
+      crownGlow = "text-yellow-500 drop-shadow-lg";
     }
-    else if(index < 3){
+    else if(index<3){
       topStyle = `bg-${color}-50 border border-${color}-200`;
     }
     else{
@@ -234,18 +238,25 @@ function renderCards(scores,bodyId,color){
     }
 
     html+=`
-    <div class="${topStyle} rounded-2xl p-4 shadow transition">
+    <div class="${topStyle} rounded-2xl p-5 shadow transition duration-500">
 
-      <div class="flex justify-between items-center mb-2">
-        <div class="text-lg font-semibold">
-          ${medals[index]} ${item[0]}
+      <div class="flex justify-between items-center mb-3">
+
+        <div class="text-lg font-semibold flex items-center gap-2">
+          <span class="${crownGlow} text-2xl">
+            ${medals[index]}
+          </span>
+          ${item[0]}
         </div>
-        <div class="font-bold text-${color}-600">
-          ${item[1]} คะแนน
+
+        <div class="font-bold text-xl text-${color}-600 score-value"
+             data-target="${item[1]}">
+          0
         </div>
+
       </div>
 
-      <!-- Progress Bar -->
+      <!-- Progress -->
       <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div class="bg-${color}-400 h-3 transition-all duration-700"
              style="width:${percent}%"></div>
@@ -255,6 +266,28 @@ function renderCards(scores,bodyId,color){
   });
 
   document.getElementById(bodyId).innerHTML = html;
+
+  animateScores(bodyId);
+}
+function animateScores(containerId){
+  const scores = document
+    .getElementById(containerId)
+    .querySelectorAll(".score-value");
+
+  scores.forEach(el=>{
+    let target = parseInt(el.dataset.target);
+    let count = 0;
+    let speed = Math.ceil(target / 30);
+
+    let interval = setInterval(()=>{
+      count += speed;
+      if(count >= target){
+        count = target;
+        clearInterval(interval);
+      }
+      el.textContent = count + " คะแนน";
+    },20);
+  });
 }
 
 loadRanking();
