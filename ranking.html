@@ -172,6 +172,9 @@ function logout(){
 
 const sheetURL="https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
 
+
+
+
 async function loadRanking(){
 
   const res = await fetch(sheetURL + "?t=" + new Date().getTime());
@@ -200,7 +203,9 @@ async function loadRanking(){
   renderCards(maleScores,"maleBody","blue");
 }
 
-function renderCards(scores,bodyId,color){
+function renderCards(scores, bodyId, color){
+
+  let genderKey = bodyId === "femaleBody" ? "female" : "male";
 
   let arr = Object.entries(scores)
   .sort((a,b)=>b[1]-a[1])
@@ -218,7 +223,11 @@ function renderCards(scores,bodyId,color){
 
   arr.forEach((item,index)=>{
 
-    let percent = Math.round((item[1]/maxScore)*100);
+    let name = item[0];
+    let newScore = item[1];
+    let oldScore = previousScores[genderKey][name] || 0;
+
+    let percent = Math.round((newScore/maxScore)*100);
 
     let topStyle="";
     let crownGlow="";
@@ -246,49 +255,73 @@ function renderCards(scores,bodyId,color){
           <span class="${crownGlow} text-2xl">
             ${medals[index]}
           </span>
-          ${item[0]}
+          ${name}
         </div>
 
         <div class="font-bold text-xl text-${color}-600 score-value"
-             data-target="${item[1]}">
-          0
+             data-old="${oldScore}"
+             data-target="${newScore}">
+          ${oldScore} คะแนน
         </div>
 
       </div>
 
-      <!-- Progress -->
       <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
         <div class="bg-${color}-400 h-3 transition-all duration-700"
              style="width:${percent}%"></div>
       </div>
 
     </div>`;
+
+    // อัปเดตค่าเก็บล่าสุด
+    previousScores[genderKey][name] = newScore;
   });
 
   document.getElementById(bodyId).innerHTML = html;
 
   animateScores(bodyId);
 }
+
 function animateScores(containerId){
+
   const scores = document
     .getElementById(containerId)
     .querySelectorAll(".score-value");
 
   scores.forEach(el=>{
+
+    let oldValue = parseInt(el.dataset.old);
     let target = parseInt(el.dataset.target);
-    let count = 0;
-    let speed = Math.ceil(target / 30);
+
+    // ❌ ถ้าเท่าเดิม ไม่ต้องวิ่ง
+    if(oldValue === target){
+      el.textContent = target + " คะแนน";
+      return;
+    }
+
+    let current = oldValue;
+    let speed = Math.ceil((target - oldValue) / 30);
 
     let interval = setInterval(()=>{
-      count += speed;
-      if(count >= target){
-        count = target;
+
+      current += speed;
+
+      if(current >= target){
+        current = target;
         clearInterval(interval);
       }
-      el.textContent = count + " คะแนน";
+
+      el.textContent = current + " คะแนน";
+
     },20);
+
   });
 }
+let previousScores = {
+  female: {},
+  male: {}
+};
+
 
 loadRanking();
 setInterval(loadRanking,5000);
