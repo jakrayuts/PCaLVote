@@ -20,58 +20,71 @@
   </style>
 </head>
 
-<body class="min-h-screen flex items-center justify-center 
+<body class="min-h-screen flex flex-col 
              bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
 
-  <form onsubmit="login(event)"
-        class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
-               border border-white/40 transition duration-500 hover:scale-105">
+  <!-- MAIN -->
+  <div class="flex-grow flex items-center justify-center px-4">
 
-    <!-- Title -->
-    <div class="text-center mb-6">
-      <h2 class="text-2xl font-semibold text-gray-700">Login</h2>
-      <p class="text-sm text-gray-500 mt-1">เข้าสู่ระบบสำหรับกรรมการ</p>
+    <form onsubmit="login(event)"
+          class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
+                 border border-white/40 transition duration-500 hover:scale-105">
+
+      <!-- Title -->
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-700">Login</h2>
+        <p class="text-sm text-gray-500 mt-1">เข้าสู่ระบบสำหรับกรรมการ</p>
+      </div>
+
+      <!-- Username -->
+      <div class="mb-4">
+        <input id="username" type="text" placeholder="Username" autofocus
+          class="w-full px-4 py-3 rounded-xl border border-pink-200
+                 focus:outline-none focus:ring-2 focus:ring-pink-300
+                 bg-white/80 placeholder-gray-400 transition">
+      </div>
+
+      <!-- Password -->
+      <div class="mb-5">
+        <input id="password" type="password" placeholder="Password"
+          class="w-full px-4 py-3 rounded-xl border border-purple-200
+                 focus:outline-none focus:ring-2 focus:ring-purple-300
+                 bg-white/80 placeholder-gray-400 transition">
+      </div>
+
+      <!-- Button -->
+      <button id="loginBtn" type="submit"
+        class="w-full py-3 rounded-xl text-white font-medium
+               bg-gradient-to-r from-pink-400 to-purple-400
+               hover:from-pink-500 hover:to-purple-500
+               shadow-lg hover:shadow-xl
+               transition duration-300 ease-in-out
+               flex items-center justify-center gap-2">
+
+        <span id="btnText">✨ Login</span>
+
+        <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
+             xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10"
+                  stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8v8H4z"></path>
+        </svg>
+      </button>
+
+    </form>
+
+  </div>
+
+    <!-- FOOTER -->
+  <footer class="w-full text-center py-5 text-sm text-gray-600 
+                 bg-white/40 backdrop-blur-md">
+    🎓 Back to School Event 2026  
+    <div class="text-xs opacity-70 mt-1">
+      Developed by Jakrayut Sangbunrueang
     </div>
-
-    <!-- Username -->
-    <div class="mb-4">
-      <input id="username" type="text" placeholder="Username" autofocus
-        class="w-full px-4 py-3 rounded-xl border border-pink-200
-               focus:outline-none focus:ring-2 focus:ring-pink-300
-               bg-white/80 placeholder-gray-400 transition">
-    </div>
-
-    <!-- Password -->
-    <div class="mb-5">
-      <input id="password" type="password" placeholder="Password"
-        class="w-full px-4 py-3 rounded-xl border border-purple-200
-               focus:outline-none focus:ring-2 focus:ring-purple-300
-               bg-white/80 placeholder-gray-400 transition">
-    </div>
-
-    <!-- Button -->
-    <button id="loginBtn" type="submit"
-      class="w-full py-3 rounded-xl text-white font-medium
-             bg-gradient-to-r from-pink-400 to-purple-400
-             hover:from-pink-500 hover:to-purple-500
-             shadow-lg hover:shadow-xl
-             transition duration-300 ease-in-out
-             flex items-center justify-center gap-2">
-
-      <span id="btnText">✨ Login</span>
-
-      <!-- Spinner -->
-      <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
-           xmlns="http://www.w3.org/2000/svg" fill="none"
-           viewBox="0 0 24 24">
-        <circle class="opacity-25" cx="12" cy="12" r="10"
-                stroke="currentColor" stroke-width="4"></circle>
-        <path class="opacity-75" fill="currentColor"
-              d="M4 12a8 8 0 018-8v8H4z"></path>
-      </svg>
-    </button>
-
-  </form>
+  </footer>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
@@ -153,5 +166,6 @@ document.getElementById("username").addEventListener("keydown", function(e) {
   
 </body>
 </html>
+
 
 
