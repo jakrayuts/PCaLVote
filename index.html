@@ -23,7 +23,6 @@
 <body class="min-h-screen flex items-center justify-center 
              bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
 
-  <!-- เปลี่ยนเป็น FORM -->
   <form onsubmit="login(event)"
         class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
                border border-white/40 transition duration-500 hover:scale-105">
@@ -51,13 +50,25 @@
     </div>
 
     <!-- Button -->
-    <button type="submit"
+    <button id="loginBtn" type="submit"
       class="w-full py-3 rounded-xl text-white font-medium
              bg-gradient-to-r from-pink-400 to-purple-400
              hover:from-pink-500 hover:to-purple-500
              shadow-lg hover:shadow-xl
-             transition duration-300 ease-in-out">
-      ✨ Login
+             transition duration-300 ease-in-out
+             flex items-center justify-center gap-2">
+
+      <span id="btnText">✨ Login</span>
+
+      <!-- Spinner -->
+      <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
+           xmlns="http://www.w3.org/2000/svg" fill="none"
+           viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10"
+                stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor"
+              d="M4 12a8 8 0 018-8v8H4z"></path>
+      </svg>
     </button>
 
   </form>
@@ -65,13 +76,15 @@
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
 
-// ฟังก์ชัน Login
 function login(event) {
 
-  event.preventDefault(); // ป้องกันหน้ารีเฟรช
+  event.preventDefault();
 
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
+  const btn = document.getElementById("loginBtn");
+  const spinner = document.getElementById("spinner");
+  const btnText = document.getElementById("btnText");
 
   if(!username || !password){
     Swal.fire({
@@ -81,6 +94,11 @@ function login(event) {
     });
     return;
   }
+
+  // 🔹 เปิด Loading
+  btn.disabled = true;
+  spinner.classList.remove("hidden");
+  btnText.textContent = "กำลังเข้าสู่ระบบ...";
 
   fetch(`${API}?action=login&username=${username}&password=${password}`)
   .then(res => res.json())
@@ -102,33 +120,34 @@ function login(event) {
       }, 1200);
 
     } else {
-
-      Swal.fire({
-        icon: 'error',
-        title: 'Login ไม่สำเร็จ',
-        text: 'Username หรือ Password ไม่ถูกต้อง',
-        confirmButtonColor: '#f472b6'
-      });
+      throw new Error("Login failed");
     }
+
   })
   .catch(() => {
+
     Swal.fire({
       icon: 'error',
-      title: 'เกิดข้อผิดพลาด',
-      text: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้'
+      title: 'Login ไม่สำเร็จ',
+      text: 'Username หรือ Password ไม่ถูกต้อง',
+      confirmButtonColor: '#f472b6'
     });
+
+    // 🔹 ปิด Loading
+    btn.disabled = false;
+    spinner.classList.add("hidden");
+    btnText.textContent = "✨ Login";
   });
 }
 
 
-// 🔹 กด Enter ที่ Username → ไป Password
+// 🔹 Enter ที่ Username → ไป Password
 document.getElementById("username").addEventListener("keydown", function(e) {
   if (e.key === "Enter") {
     e.preventDefault();
     document.getElementById("password").focus();
   }
 });
-
 </script>
 
 </body>
