@@ -23,6 +23,46 @@ body{
 
 <body class="min-h-screen flex items-center justify-center p-6">
 
+<!-- 🔐 LOGIN CHECK -->
+<script>
+const judgeName = localStorage.getItem("judge");
+if(!judgeName){
+  window.location.href="index.html";
+}
+</script>
+
+<!-- 🔷 NAVBAR -->
+<div class="fixed top-0 left-0 w-full z-50 
+            backdrop-blur-md bg-white/70 
+            shadow-md">
+
+  <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+
+    <!-- โลโก้ -->
+    <a href="home.html"
+       class="text-lg md:text-xl font-semibold text-gray-700 hover:text-purple-600 transition">
+      🎓 Back to School Voting
+    </a>
+
+    <!-- ด้านขวา -->
+    <div class="flex items-center gap-4">
+
+      <div class="hidden sm:block bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm shadow">
+        👤 <span id="judgeNameTab"></span>
+      </div>
+
+      <button onclick="logout()"
+        class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm transition shadow">
+        Logout
+      </button>
+
+    </div>
+
+  </div>
+</div>
+
+
+
 <div class="w-full max-w-4xl text-center">
 
 <h1 class="text-3xl md:text-4xl font-bold text-gray-700 mb-3">
@@ -84,6 +124,19 @@ Ranking อันดับรวม
 </div>
 
 </div>
+
+<script>
+
+// แสดงชื่อกรรมการที่มุมขวาบน
+document.getElementById("judgeNameTab").innerText = localStorage.getItem("judge");
+// logout
+function logout(){
+  localStorage.removeItem("judge");
+  window.location.href="index.html";
+}
+</script>
+
+
 
 </body>
 </html>
