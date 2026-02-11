@@ -10,6 +10,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
+
+  /* คะแนนเพิ่ม Flash */
+@keyframes flashGreen {
+  0% { background-color: rgba(34,197,94,0.3); }
+  100% { background-color: transparent; }
+}
+
+.flash-score {
+  animation: flashGreen 0.8s ease;
+}
+
+/* Slide ตอนอันดับเปลี่ยน */
+.slide-up {
+  animation: slideUp 0.6s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(15px); opacity:0; }
+  to { transform: translateY(0); opacity:1; }
+}
+
 body{
     font-family:'Prompt',sans-serif;
     background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
@@ -229,6 +250,13 @@ function renderCards(scores, bodyId, color){
 
     let percent = Math.round((newScore/maxScore)*100);
 
+    // 🔥 เช็คว่าคะแนนเพิ่มไหม
+    let increased = newScore > oldScore;
+
+    // 🏆 เช็คว่าอันดับเปลี่ยนไหม
+    let oldIndex = previousRanking[genderKey].indexOf(name);
+    let rankChanged = oldIndex !== -1 && oldIndex !== index;
+
     let topStyle="";
     let crownGlow="";
 
@@ -247,7 +275,8 @@ function renderCards(scores, bodyId, color){
     }
 
     html+=`
-    <div class="${topStyle} rounded-2xl p-5 shadow transition duration-500">
+    <div class="${topStyle} ${rankChanged ? 'slide-up':''}
+                rounded-2xl p-5 shadow transition duration-500">
 
       <div class="flex justify-between items-center mb-3">
 
@@ -258,7 +287,8 @@ function renderCards(scores, bodyId, color){
           ${name}
         </div>
 
-        <div class="font-bold text-xl text-${color}-600 score-value"
+        <div class="font-bold text-xl text-${color}-600 score-value
+                    ${increased ? 'flash-score':''}"
              data-old="${oldScore}"
              data-target="${newScore}">
           ${oldScore} คะแนน
@@ -273,9 +303,10 @@ function renderCards(scores, bodyId, color){
 
     </div>`;
 
-    // อัปเดตค่าเก็บล่าสุด
     previousScores[genderKey][name] = newScore;
   });
+
+  previousRanking[genderKey] = arr.map(item => item[0]);
 
   document.getElementById(bodyId).innerHTML = html;
 
@@ -293,8 +324,8 @@ function animateScores(containerId){
     let oldValue = parseInt(el.dataset.old);
     let target = parseInt(el.dataset.target);
 
-    // ❌ ถ้าเท่าเดิม ไม่ต้องวิ่ง
-    if(oldValue === target){
+    // 🔥 วิ่งเฉพาะตอนเพิ่มเท่านั้น
+    if(target <= oldValue){
       el.textContent = target + " คะแนน";
       return;
     }
@@ -317,9 +348,15 @@ function animateScores(containerId){
 
   });
 }
+
 let previousScores = {
   female: {},
   male: {}
+};
+
+let previousRanking = {
+  female: [],
+  male: []
 };
 
 
