@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏆 Ranking - Back to School</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+body{
+  font-family:'Prompt',sans-serif;
+  background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+}
+.glass{
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+</style>
+</head>
+
+<body class="min-h-screen text-gray-700">
+
+<!-- 🔐 LOGIN CHECK -->
+<script>
+const judgeName = localStorage.getItem("judge");
+if(!judgeName){
+  window.location.href="index.html";
+}
+</script>
+
+<!-- 🔷 NAVBAR -->
+<div class="glass px-6 py-4 flex justify-between items-center">
+
+  <!-- กดกลับหน้าหลัก -->
+  <a href="home.html" class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
+    🎓 Back to School Voting
+  </a>
+
+  <div class="flex items-center gap-4">
+
+    <div class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+      👤 <span id="judgeNameTab"></span>
+    </div>
+
+    <button onclick="logout()"
+      class="bg-red-300 hover:bg-red-400 text-white px-4 py-2 rounded-lg text-sm transition">
+      Logout
+    </button>
+
+  </div>
+</div>
+
+<!-- 🔶 TITLE -->
+<div class="text-center mt-10 mb-8">
+  <h1 class="text-4xl font-bold">
+    🏆 ตารางคะแนนรวมแยกฝ่าย
+  </h1>
+  <p class="text-gray-500 mt-2">อัปเดตคะแนนแบบ Real-Time</p>
+</div>
+
+<!-- 🔷 CONTENT -->
+<div class="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto px-4 pb-16">
+
+  <!-- 👩 ฝ่ายหญิง -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-pink-500 mb-6 text-center">
+      👩 ฝ่ายหญิง
+    </h2>
+    <div id="femaleBody" class="space-y-4"></div>
+  </div>
+
+  <!-- 👨 ฝ่ายชาย -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-blue-500 mb-6 text-center">
+      👨 ฝ่ายชาย
+    </h2>
+    <div id="maleBody" class="space-y-4"></div>
+  </div>
+
+</div>
+
+<script>
+
+document.getElementById("judgeNameTab").innerText = judgeName;
+
+function logout(){
+  localStorage.removeItem("judge");
+  window.location.href="index.html";
+}
+
+const sheetURL="https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
+
+async function loadRanking(){
+
+  const res = await fetch(sheetURL + "?t=" + new Date().getTime());
+  const data = await res.json();
+
+  let femaleScores = {};
+  let maleScores = {};
+
+  data.forEach(row=>{
+    let gender = row.group;
+    let num = row.contestant;
+    let total = parseInt(row.total) || 0;
+
+    if(gender==="female"){
+      if(!femaleScores[num]) femaleScores[num]=0;
+      femaleScores[num]+=total;
+    }
+
+    if(gender==="male"){
+      if(!maleScores[num]) maleScores[num]=0;
+      maleScores[num]+=total;
+    }
+  });
+
+  renderCards(femaleScores,"femaleBody","pink");
+  renderCards(maleScores,"maleBody","blue");
+}
+
+function renderCards(scores,bodyId,color){
+
+  let arr = Object.entries(scores)
+  .sort((a,b)=>b[1]-a[1])
+  .slice(0,5); // ✅ แสดงแค่ 5 อันดับ
+
+  let medals=["🥇","🥈","🥉","🏅","🏅"]; // เพิ่ม rank 4-5
+  let html="";
+
+  arr.forEach((item,index)=>{
+
+    let highlight = index < 3 
+      ? `scale-105 bg-${color}-50 border-2 border-${color}-300`
+      : "bg-white";
+
+    html+=`
+    <div class="${highlight} rounded-2xl p-4 flex justify-between items-center shadow transition hover:scale-105">
+      
+      <div class="text-lg font-semibold w-10 text-center">
+        ${medals[index] || (index+1)}
+      </div>
+
+      <div class="text-xl font-bold text-${color}-500">
+        หมายเลข ${item[0]}
+      </div>
+
+      <div class="text-xl font-bold">
+        ${item[1]} คะแนน
+      </div>
+
+    </div>`;
+  });
+
+  document.getElementById(bodyId).innerHTML = html;
+}
+
+loadRanking();
+setInterval(loadRanking,5000);
+
+</script>
+
+</body>
+</html>
