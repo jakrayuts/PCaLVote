@@ -20,51 +20,70 @@ if(!judgeName){
 }
 </script>
 
-  <!-- 🔷 Header -->
-<div class="flex justify-between items-center mb-6">
+<!-- 🔷 HEADER -->
+<div class="bg-white/70 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center">
 
-<a href="home.html"
+  <!-- โลโก้กดกลับหน้า home -->
+  <a href="home.html"
      class="text-lg font-semibold text-gray-700 hover:text-purple-500 transition">
     🎓 Back to School Voting
   </a>
 
-<div class="flex items-center gap-3">
+  <div class="flex items-center gap-3">
 
-<span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
-👤 <span id="judgeNameTab"></span>
-</span>
+    <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+      👤 <span id="judgeNameTab"></span>
+    </span>
 
-<button onclick="logout()"
-class="bg-red-300 hover:bg-red-400 text-white px-3 py-2 rounded-lg text-sm">
-Logout
-</button>
+    <button onclick="logout()"
+      class="bg-red-300 hover:bg-red-400 text-white px-3 py-2 rounded-lg text-sm">
+      Logout
+    </button>
 
+  </div>
 
+</div>
+
+<!-- 🔷 CONTENT -->
 <div class="p-6">
+
 <h1 class="text-3xl font-bold text-center mb-10 text-gray-700">
 🏆 Dashboard คะแนนรวม 5 กรรมการ
 </h1>
 
 <div class="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
 
-<div class="bg-white rounded-2xl shadow-lg p-6">
-<h2 class="text-xl font-semibold text-pink-500 mb-4 text-center">👩 ฝ่ายหญิง</h2>
-<canvas id="femaleChart"></canvas>
-<h3 class="mt-6 font-bold text-center">Top 3</h3>
-<div id="femaleTop" class="space-y-2 mt-3 text-center"></div>
+  <!-- ฝ่ายหญิง -->
+  <div class="bg-white rounded-2xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-pink-500 mb-4 text-center">👩 ฝ่ายหญิง</h2>
+    <canvas id="femaleChart"></canvas>
+    <h3 class="mt-6 font-bold text-center">Top 3</h3>
+    <div id="femaleTop" class="space-y-2 mt-3 text-center"></div>
+  </div>
+
+  <!-- ฝ่ายชาย -->
+  <div class="bg-white rounded-2xl shadow-lg p-6">
+    <h2 class="text-xl font-semibold text-blue-500 mb-4 text-center">👨 ฝ่ายชาย</h2>
+    <canvas id="maleChart"></canvas>
+    <h3 class="mt-6 font-bold text-center">Top 3</h3>
+    <div id="maleTop" class="space-y-2 mt-3 text-center"></div>
+  </div>
+
 </div>
 
-<div class="bg-white rounded-2xl shadow-lg p-6">
-<h2 class="text-xl font-semibold text-blue-500 mb-4 text-center">👨 ฝ่ายชาย</h2>
-<canvas id="maleChart"></canvas>
-<h3 class="mt-6 font-bold text-center">Top 3</h3>
-<div id="maleTop" class="space-y-2 mt-3 text-center"></div>
-</div>
-
-</div>
 </div>
 
 <script>
+
+// แสดงชื่อกรรมการ
+document.getElementById("judgeNameTab").innerText = judgeName;
+
+// logout
+function logout(){
+  localStorage.removeItem("judge");
+  window.location.href="login.html";
+}
+
 const sheetURL = "https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
 
 let femaleChart, maleChart;
@@ -144,8 +163,7 @@ responsive:true,
 plugins:{legend:{display:false}},
 scales:{y:{beginAtZero:true}}
 }
-}
-);
+});
 
 if(chartId==="femaleChart") femaleChart=newChart;
 if(chartId==="maleChart") maleChart=newChart;
@@ -154,19 +172,8 @@ if(chartId==="maleChart") maleChart=newChart;
 
 loadDashboard();
 setInterval(loadDashboard,5000);
-</script>
 
-<!-- โหลดเมนูหลัง DOM พร้อม -->
-<script>
-window.addEventListener("DOMContentLoaded", function(){
-  fetch("menu.html")
-    .then(response => response.text())
-    .then(data => {
-      document.getElementById("menu-container").innerHTML = data;
-    });
-});
 </script>
 
 </body>
-
 </html>
