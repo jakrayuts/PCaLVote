@@ -34,9 +34,11 @@ if(!judgeName){
 <!-- 🔷 TOP NAVBAR -->
 <div class="bg-white/70 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center">
 
-  <div class="text-lg font-semibold text-gray-700">
+  <!-- 🔥 คลิกแล้วกลับหน้าเมนู -->
+  <a href="home.html"
+     class="text-lg font-semibold text-gray-700 hover:text-purple-500 transition">
     🎓 Back to School Voting
-  </div>
+  </a>
 
   <div class="flex items-center gap-4">
 
@@ -57,8 +59,14 @@ if(!judgeName){
 
 <script>
 
-// แสดงชื่อกรรมการ
-document.getElementById("judgeNameTab").innerText = judgeName;
+// 🔐 ตรวจสอบ login
+const judgeName = localStorage.getItem("judge");
+
+if(!judgeName){
+  window.location.href="login.html";
+}else{
+  document.getElementById("judgeNameTab").innerText = judgeName;
+}
 
 // logout
 function logout(){
@@ -66,7 +74,9 @@ function logout(){
   window.location.href="login.html";
 }
 
+
 </script>
 
 </body>
+
 </html>
