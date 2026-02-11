@@ -14,13 +14,15 @@ body{
   font-family:'Prompt',sans-serif;
   background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
 }
+
 .glass{
   backdrop-filter: blur(14px);
-  background: rgba(255,255,255,0.75);
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  background: rgba(255,255,255,0.85);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
+
 .fade-in{
-  animation: fadeIn 0.8s ease-in-out;
+  animation: fadeIn .8s ease-in-out;
 }
 @keyframes fadeIn{
   from{opacity:0; transform:translateY(20px);}
@@ -29,7 +31,7 @@ body{
 </style>
 </head>
 
-<body class="min-h-screen flex flex-col">
+<body class="min-h-screen flex flex-col pb-20 md:pb-0">
 
 <!-- 🔐 LOGIN CHECK -->
 <script>
@@ -39,8 +41,8 @@ if(!judgeName){
 }
 </script>
 
-<!-- 🔷 NAVBAR -->
-<div class="glass px-6 py-4 flex justify-between items-center">
+<!-- 🔷 NAVBAR (Desktop Only) -->
+<div class="hidden md:flex glass px-6 py-4 justify-between items-center">
 
   <a href="home.html"
      class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
@@ -57,52 +59,93 @@ if(!judgeName){
       Logout
     </button>
   </div>
-
 </div>
 
-<!-- 🔷 CONTENT WRAPPER -->
-<div class="flex-grow p-6 fade-in">
+<!-- 🔷 CONTENT -->
+<div class="flex-grow px-4 sm:px-6 py-6 sm:py-10 fade-in">
 
-<h1 class="text-4xl font-bold text-center mb-12 text-gray-700">
+<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-700">
 🏆 Dashboard คะแนนรวม 5 กรรมการ
 </h1>
 
-<div class="grid lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 max-w-7xl mx-auto">
 
   <!-- 👩 ฝ่ายหญิง -->
-  <div class="glass rounded-3xl p-8">
-    <h2 class="text-2xl font-semibold text-pink-500 mb-6 text-center">👩 ฝ่ายหญิง</h2>
-    <canvas id="femaleChart"></canvas>
+  <div class="glass rounded-3xl p-4 sm:p-8">
+    <h2 class="text-xl sm:text-2xl font-semibold text-pink-500 mb-4 sm:mb-6 text-center">
+      👩 ฝ่ายหญิง
+    </h2>
 
-    <h3 class="mt-8 font-bold text-center text-gray-600">Top 3</h3>
+    <div class="overflow-x-auto">
+      <canvas id="femaleChart" class="max-h-[350px]"></canvas>
+    </div>
+
+    <h3 class="mt-6 sm:mt-8 font-bold text-center text-gray-600">Top 3</h3>
     <div id="femaleTop" class="space-y-3 mt-4"></div>
   </div>
 
   <!-- 👨 ฝ่ายชาย -->
-  <div class="glass rounded-3xl p-8">
-    <h2 class="text-2xl font-semibold text-blue-500 mb-6 text-center">👨 ฝ่ายชาย</h2>
-    <canvas id="maleChart"></canvas>
+  <div class="glass rounded-3xl p-4 sm:p-8">
+    <h2 class="text-xl sm:text-2xl font-semibold text-blue-500 mb-4 sm:mb-6 text-center">
+      👨 ฝ่ายชาย
+    </h2>
 
-    <h3 class="mt-8 font-bold text-center text-gray-600">Top 3</h3>
+    <div class="overflow-x-auto">
+      <canvas id="maleChart" class="max-h-[350px]"></canvas>
+    </div>
+
+    <h3 class="mt-6 sm:mt-8 font-bold text-center text-gray-600">Top 3</h3>
     <div id="maleTop" class="space-y-3 mt-4"></div>
   </div>
 
 </div>
 </div>
 
-  <!-- FOOTER -->
-<footer class="footer mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
+<!-- 📱 MOBILE BOTTOM NAV -->
+<nav class="fixed bottom-0 left-0 w-full md:hidden
+            glass border-t border-white/40
+            flex justify-around items-center
+            py-3 text-sm shadow-lg">
+
+<a href="home.html" class="flex flex-col items-center text-gray-600">
+  <span>🏠</span>
+  <span class="text-xs">Home</span>
+</a>
+
+<a href="dashboard.html" class="flex flex-col items-center text-purple-600 font-semibold">
+  <span>📊</span>
+  <span class="text-xs">Dashboard</span>
+</a>
+
+<a href="ranking.html" class="flex flex-col items-center text-gray-600">
+  <span>🏆</span>
+  <span class="text-xs">Ranking</span>
+</a>
+
+<a href="vote.html" class="flex flex-col items-center text-gray-600">
+  <span>📝</span>
+  <span class="text-xs">Vote</span>
+</a>
+
+</nav>
+
+<!-- FOOTER Desktop -->
+<footer class="hidden md:block mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
 
 <script>
-
 document.getElementById("judgeNameTab").innerText = judgeName;
 
 function logout(){
   localStorage.removeItem("judge");
   window.location.href="index.html";
 }
+</script>
+
+<!-- 🔷 ใช้ JS เดิมของคุณต่อได้เลย -->
+
+<script>
 
 const sheetURL = "https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
 
@@ -208,6 +251,7 @@ setInterval(loadDashboard,5000);
 </body>
 
 </html>
+
 
 
 
