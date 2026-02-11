@@ -204,30 +204,51 @@ function renderCards(scores,bodyId,color){
 
   let arr = Object.entries(scores)
   .sort((a,b)=>b[1]-a[1])
-  .slice(0,5); // ✅ แสดงแค่ 5 อันดับ
+  .slice(0,5);
 
-  let medals=["🥇","🥈","🥉","🏅","🏅"]; // เพิ่ม rank 4-5
+  if(arr.length === 0){
+    document.getElementById(bodyId).innerHTML = "<div class='text-center text-gray-400'>ไม่มีข้อมูล</div>";
+    return;
+  }
+
+  let maxScore = arr[0][1]; // คะแนนอันดับ 1
+  let medals=["🥇","🥈","🥉","🏅","🏅"];
   let html="";
 
   arr.forEach((item,index)=>{
 
-    let highlight = index < 3 
-      ? `scale-105 bg-${color}-50 border-2 border-${color}-300`
-      : "bg-white";
+    let percent = Math.round((item[1]/maxScore)*100);
+
+    let topStyle = "";
+    if(index === 0){
+      topStyle = `
+        scale-105 bg-${color}-100 border-2 border-${color}-400
+        shadow-lg animate-pulse
+      `;
+    }
+    else if(index < 3){
+      topStyle = `bg-${color}-50 border border-${color}-200`;
+    }
+    else{
+      topStyle = "bg-white";
+    }
 
     html+=`
-    <div class="${highlight} rounded-2xl p-4 flex justify-between items-center shadow transition hover:scale-105">
-      
-      <div class="text-lg font-semibold w-10 text-center">
-        ${medals[index] || (index+1)}
+    <div class="${topStyle} rounded-2xl p-4 shadow transition">
+
+      <div class="flex justify-between items-center mb-2">
+        <div class="text-lg font-semibold">
+          ${medals[index]} ${item[0]}
+        </div>
+        <div class="font-bold text-${color}-600">
+          ${item[1]} คะแนน
+        </div>
       </div>
 
-      <div class="text-xl font-bold text-${color}-500">
-        ${item[0]}
-      </div>
-
-      <div class="text-xl font-bold">
-        ${item[1]} คะแนน
+      <!-- Progress Bar -->
+      <div class="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+        <div class="bg-${color}-400 h-3 transition-all duration-700"
+             style="width:${percent}%"></div>
       </div>
 
     </div>`;
