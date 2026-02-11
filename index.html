@@ -1,169 +1,188 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <title>Back to School Voting - Login</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Back to School Voting - Login</title>
 
-  <!-- Tailwind CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
 
-  <!-- SweetAlert -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<style>
+body{
+  font-family:'Prompt',sans-serif;
+}
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
-
-  <style>
-    body {
-      font-family: 'Prompt', sans-serif;
-    }
-  </style>
+/* background animation */
+@keyframes gradientMove {
+  0% { background-position: 0% 50% }
+  50% { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+.animated-bg{
+  background-size: 300% 300%;
+  animation: gradientMove 12s ease infinite;
+}
+</style>
 </head>
 
-<body class="min-h-screen flex flex-col 
-             bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
+<body class="min-h-screen flex flex-col animated-bg
+             bg-gradient-to-br from-pink-300 via-purple-300 to-blue-300">
 
-  <!-- MAIN -->
-  <div class="flex-grow flex items-center justify-center px-4">
+<div class="flex-grow flex items-center justify-center px-4">
 
-    <form onsubmit="login(event)"
-          class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
-                 border border-white/40 transition duration-500 hover:scale-105">
+<form onsubmit="login(event)"
+class="w-full max-w-md
+       bg-white/30 backdrop-blur-2xl
+       border border-white/40
+       shadow-2xl rounded-3xl
+       p-6 sm:p-8
+       transition duration-500
+       sm:hover:scale-[1.02]">
 
-      <!-- Title -->
-      <div class="text-center mb-6">
-        <h2 class="text-2xl font-semibold text-gray-700">Login</h2>
-        <p class="text-sm text-gray-500 mt-1">เข้าสู่ระบบสำหรับกรรมการ</p>
-      </div>
-
-      <!-- Username -->
-      <div class="mb-4">
-        <input id="username" type="text" placeholder="Username" autofocus
-          class="w-full px-4 py-3 rounded-xl border border-pink-200
-                 focus:outline-none focus:ring-2 focus:ring-pink-300
-                 bg-white/80 placeholder-gray-400 transition">
-      </div>
-
-      <!-- Password -->
-      <div class="mb-5">
-        <input id="password" type="password" placeholder="Password"
-          class="w-full px-4 py-3 rounded-xl border border-purple-200
-                 focus:outline-none focus:ring-2 focus:ring-purple-300
-                 bg-white/80 placeholder-gray-400 transition">
-      </div>
-
-      <!-- Button -->
-      <button id="loginBtn" type="submit"
-        class="w-full py-3 rounded-xl text-white font-medium
-               bg-gradient-to-r from-pink-400 to-purple-400
-               hover:from-pink-500 hover:to-purple-500
-               shadow-lg hover:shadow-xl
-               transition duration-300 ease-in-out
-               flex items-center justify-center gap-2">
-
-        <span id="btnText">✨ Login</span>
-
-        <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
-             xmlns="http://www.w3.org/2000/svg" fill="none"
-             viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10"
-                  stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8v8H4z"></path>
-        </svg>
-      </button>
-
-    </form>
-
+  <!-- Title -->
+  <div class="text-center mb-8">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-white drop-shadow-md">
+      Login
+    </h2>
+    <p class="text-white/80 text-sm mt-2">
+      เข้าสู่ระบบสำหรับกรรมการ
+    </p>
   </div>
 
+  <!-- Username -->
+  <div class="relative mb-6">
+    <input id="username" type="text" required
+      class="peer w-full px-4 pt-5 pb-2 text-base rounded-xl
+             bg-white/70 border border-white/60
+             focus:outline-none focus:ring-2 focus:ring-pink-300
+             placeholder-transparent"
+      placeholder="Username">
+    <label
+      class="absolute left-4 top-2 text-sm text-gray-500
+             transition-all
+             peer-placeholder-shown:top-3.5
+             peer-placeholder-shown:text-base
+             peer-placeholder-shown:text-gray-400
+             peer-focus:top-2
+             peer-focus:text-sm
+             peer-focus:text-pink-500">
+      Username
+    </label>
+  </div>
 
-<!-- FOOTER -->
-<footer class="footer mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
+  <!-- Password -->
+  <div class="relative mb-8">
+    <input id="password" type="password" required
+      class="peer w-full px-4 pt-5 pb-2 text-base rounded-xl
+             bg-white/70 border border-white/60
+             focus:outline-none focus:ring-2 focus:ring-purple-300
+             placeholder-transparent"
+      placeholder="Password">
+    <label
+      class="absolute left-4 top-2 text-sm text-gray-500
+             transition-all
+             peer-placeholder-shown:top-3.5
+             peer-placeholder-shown:text-base
+             peer-placeholder-shown:text-gray-400
+             peer-focus:top-2
+             peer-focus:text-purple-500">
+      Password
+    </label>
+  </div>
+
+  <!-- Button -->
+  <button id="loginBtn" type="submit"
+    class="w-full py-3 rounded-xl text-white font-medium
+           bg-gradient-to-r from-pink-500 to-purple-500
+           hover:from-pink-600 hover:to-purple-600
+           shadow-lg hover:shadow-xl
+           transition duration-300
+           flex items-center justify-center gap-2">
+
+    <span id="btnText">เข้าสู่ระบบ</span>
+
+    <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
+         xmlns="http://www.w3.org/2000/svg" fill="none"
+         viewBox="0 0 24 24">
+      <circle class="opacity-25" cx="12" cy="12" r="10"
+              stroke="currentColor" stroke-width="4"></circle>
+      <path class="opacity-75" fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"></path>
+    </svg>
+  </button>
+
+</form>
+</div>
+
+<footer class="mt-auto text-center
+               py-4 sm:py-6
+               text-xs sm:text-sm
+               text-white/80">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
+const API="https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
 
-function login(event) {
-
+function login(event){
   event.preventDefault();
 
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value.trim();
-  const btn = document.getElementById("loginBtn");
-  const spinner = document.getElementById("spinner");
-  const btnText = document.getElementById("btnText");
+  const username=username.value.trim();
+  const password=password.value.trim();
+  const btn=document.getElementById("loginBtn");
+  const spinner=document.getElementById("spinner");
+  const btnText=document.getElementById("btnText");
 
-  if(!username || !password){
+  if(!username||!password){
     Swal.fire({
-      icon: 'warning',
-      title: 'กรุณากรอกข้อมูลให้ครบ',
-      confirmButtonColor: '#f472b6'
+      icon:'warning',
+      title:'กรุณากรอกข้อมูลให้ครบ'
     });
     return;
   }
 
-  // 🔹 เปิด Loading
-  btn.disabled = true;
+  btn.disabled=true;
   spinner.classList.remove("hidden");
-  btnText.textContent = "กำลังเข้าสู่ระบบ...";
+  btnText.textContent="กำลังเข้าสู่ระบบ...";
 
   fetch(`${API}?action=login&username=${username}&password=${password}`)
-  .then(res => res.json())
-  .then(data => {
-
-    if (data.status === "success") {
-
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.status==="success"){
+      localStorage.setItem("judge",data.judge);
       Swal.fire({
-        icon: 'success',
-        title: 'เข้าสู่ระบบสำเร็จ',
-        showConfirmButton: false,
-        timer: 1200
+        icon:'success',
+        title:'เข้าสู่ระบบสำเร็จ',
+        timer:1200,
+        showConfirmButton:false
       });
-
-      localStorage.setItem("judge", data.judge);
-
-      setTimeout(() => {
-        window.location.href = "home.html";
-      }, 1200);
-
-    } else {
-      throw new Error("Login failed");
+      setTimeout(()=>window.location.href="home.html",1200);
+    }else{
+      throw new Error();
     }
-
   })
-  .catch(() => {
-
+  .catch(()=>{
     Swal.fire({
-      icon: 'error',
-      title: 'Login ไม่สำเร็จ',
-      text: 'Username หรือ Password ไม่ถูกต้อง',
-      confirmButtonColor: '#f472b6'
+      icon:'error',
+      title:'Login ไม่สำเร็จ',
+      text:'Username หรือ Password ไม่ถูกต้อง'
     });
-
-    // 🔹 ปิด Loading
-    btn.disabled = false;
+    btn.disabled=false;
     spinner.classList.add("hidden");
-    btnText.textContent = "✨ Login";
+    btnText.textContent="เข้าสู่ระบบ";
   });
 }
 
-
-// 🔹 Enter ที่ Username → ไป Password
-document.getElementById("username").addEventListener("keydown", function(e) {
-  if (e.key === "Enter") {
+// Enter behavior
+document.getElementById("username").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
     e.preventDefault();
     document.getElementById("password").focus();
   }
 });
 </script>
 
-  
 </body>
 </html>
-
-
-
-
