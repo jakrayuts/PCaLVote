@@ -10,119 +10,144 @@
 
 <style>
 body{
-font-family:'Prompt',sans-serif;
-background: linear-gradient(135deg,#fdfbfb,#ebedee);
+  font-family:'Prompt',sans-serif;
+  background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
 }
-.card{
-background:white;
-box-shadow:0 10px 25px rgba(0,0,0,0.05);
+.glass{
+  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,0.7);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
 }
 </style>
 </head>
 
-<body class="min-h-screen p-6 text-gray-700">
+<body class="min-h-screen text-gray-700">
 
-<h1 class="text-3xl font-bold text-center mb-10">
-🏆 ตารางคะแนนรวมแยกฝ่าย
-</h1>
+<!-- 🔐 LOGIN CHECK -->
+<script>
+const judgeName = localStorage.getItem("judge");
+if(!judgeName){
+  window.location.href="login.html";
+}
+</script>
 
-<div class="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+<!-- 🔷 NAVBAR -->
+<div class="glass px-6 py-4 flex justify-between items-center">
 
-<!-- ฝ่ายหญิง -->
-<div class="card rounded-2xl p-6">
-<h2 class="text-xl font-semibold text-pink-500 mb-4 text-center">
-👩 ฝ่ายหญิง
-</h2>
+  <!-- กดกลับหน้าหลัก -->
+  <a href="main.html" class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
+    🎓 Back to School Voting
+  </a>
 
-<table class="w-full text-center">
-<thead class="bg-pink-50">
-<tr>
-<th class="p-2">อันดับ</th>
-<th>หมายเลข</th>
-<th>คะแนนรวม</th>
-</tr>
-</thead>
-<tbody id="femaleBody"></tbody>
-</table>
+  <div class="flex items-center gap-4">
+
+    <div class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+      👤 <span id="judgeNameTab"></span>
+    </div>
+
+    <button onclick="logout()"
+      class="bg-red-300 hover:bg-red-400 text-white px-4 py-2 rounded-lg text-sm transition">
+      Logout
+    </button>
+
+  </div>
 </div>
 
-<!-- ฝ่ายชาย -->
-<div class="card rounded-2xl p-6">
-<h2 class="text-xl font-semibold text-blue-500 mb-4 text-center">
-👨 ฝ่ายชาย
-</h2>
-
-<table class="w-full text-center">
-<thead class="bg-blue-50">
-<tr>
-<th class="p-2">อันดับ</th>
-<th>หมายเลข</th>
-<th>คะแนนรวม</th>
-</tr>
-</thead>
-<tbody id="maleBody"></tbody>
-</table>
+<!-- 🔶 TITLE -->
+<div class="text-center mt-10 mb-8">
+  <h1 class="text-4xl font-bold">
+    🏆 ตารางคะแนนรวมแยกฝ่าย
+  </h1>
+  <p class="text-gray-500 mt-2">อัปเดตคะแนนแบบ Real-Time</p>
 </div>
+
+<!-- 🔷 CONTENT -->
+<div class="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto px-4 pb-16">
+
+  <!-- 👩 ฝ่ายหญิง -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-pink-500 mb-6 text-center">
+      👩 ฝ่ายหญิง
+    </h2>
+    <div id="femaleBody" class="space-y-4"></div>
+  </div>
+
+  <!-- 👨 ฝ่ายชาย -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-blue-500 mb-6 text-center">
+      👨 ฝ่ายชาย
+    </h2>
+    <div id="maleBody" class="space-y-4"></div>
+  </div>
 
 </div>
 
 <script>
 
+document.getElementById("judgeNameTab").innerText = judgeName;
+
+function logout(){
+  localStorage.removeItem("judge");
+  window.location.href="login.html";
+}
+
 const sheetURL="https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
 
 async function loadRanking(){
 
-const res = await fetch(sheetURL + "?t=" + new Date().getTime());
-const data = await res.json();
+  const res = await fetch(sheetURL + "?t=" + new Date().getTime());
+  const data = await res.json();
 
-let femaleScores = {};
-let maleScores = {};
+  let femaleScores = {};
+  let maleScores = {};
 
-data.forEach(row=>{
+  data.forEach(row=>{
+    let gender = row.group;
+    let num = row.contestant;
+    let total = parseInt(row.total) || 0;
 
-let gender = row.group;
-let num = row.contestant;
-let total = parseInt(row.total) || 0;
+    if(gender==="female"){
+      if(!femaleScores[num]) femaleScores[num]=0;
+      femaleScores[num]+=total;
+    }
 
-if(gender==="female"){
-if(!femaleScores[num]) femaleScores[num]=0;
-femaleScores[num]+=total;
+    if(gender==="male"){
+      if(!maleScores[num]) maleScores[num]=0;
+      maleScores[num]+=total;
+    }
+  });
+
+  renderCards(femaleScores,"femaleBody","pink");
+  renderCards(maleScores,"maleBody","blue");
 }
 
-if(gender==="male"){
-if(!maleScores[num]) maleScores[num]=0;
-maleScores[num]+=total;
-}
+function renderCards(scores,bodyId,color){
 
-});
+  let arr = Object.entries(scores)
+  .sort((a,b)=>b[1]-a[1]);
 
-renderTable(femaleScores,"femaleBody","pink");
-renderTable(maleScores,"maleBody","blue");
+  let medals=["🥇","🥈","🥉"];
+  let html="";
 
-}
+  arr.forEach((item,index)=>{
 
-function renderTable(scores,bodyId,color){
+    let highlight = index < 3 ? "scale-105 bg-"+color+"-50 border-2 border-"+color+"-300" : "bg-white";
 
-let arr = Object.entries(scores)
-.sort((a,b)=>b[1]-a[1]);
+    html+=`
+    <div class="${highlight} rounded-2xl p-4 flex justify-between items-center shadow transition hover:scale-105">
+      <div class="text-lg font-semibold">
+        ${index<3 ? medals[index] : index+1}
+      </div>
+      <div class="text-xl font-bold text-${color}-500">
+        หมายเลข ${item[0]}
+      </div>
+      <div class="text-xl font-bold">
+        ${item[1]} คะแนน
+      </div>
+    </div>`;
+  });
 
-let medals=["🥇","🥈","🥉"];
-let html="";
-
-arr.forEach((item,index)=>{
-
-let medal = index<3 ? medals[index] : index+1;
-
-html+=`
-<tr class="border-b hover:bg-${color}-50 transition">
-<td class="p-2 font-semibold">${medal}</td>
-<td>หมายเลข ${item[0]}</td>
-<td class="font-bold">${item[1]}</td>
-</tr>`;
-});
-
-document.getElementById(bodyId).innerHTML = html;
-
+  document.getElementById(bodyId).innerHTML = html;
 }
 
 loadRanking();
