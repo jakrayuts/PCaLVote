@@ -29,7 +29,7 @@ body{
 </style>
 </head>
 
-<body class="min-h-screen">
+<body class="min-h-screen flex flex-col">
 
 <!-- 🔐 LOGIN CHECK -->
 <script>
@@ -60,8 +60,8 @@ if(!judgeName){
 
 </div>
 
-<!-- 🔷 CONTENT -->
-<div class="p-6 fade-in">
+<!-- 🔷 CONTENT WRAPPER -->
+<div class="flex-grow p-6 fade-in">
 
 <h1 class="text-4xl font-bold text-center mb-12 text-gray-700">
 🏆 Dashboard คะแนนรวม 5 กรรมการ
@@ -208,4 +208,5 @@ setInterval(loadDashboard,5000);
 </body>
 
 </html>
+
 
