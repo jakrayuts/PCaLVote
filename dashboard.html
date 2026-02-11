@@ -35,7 +35,7 @@ body{
 <script>
 const judgeName = localStorage.getItem("judge");
 if(!judgeName){
-  window.location.href="login.html";
+  window.location.href="index.html";
 }
 </script>
 
@@ -96,7 +96,7 @@ document.getElementById("judgeNameTab").innerText = judgeName;
 
 function logout(){
   localStorage.removeItem("judge");
-  window.location.href="login.html";
+  window.location.href="index.html";
 }
 
 const sheetURL = "https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
@@ -201,4 +201,5 @@ setInterval(loadDashboard,5000);
 </script>
 
 </body>
+
 </html>
