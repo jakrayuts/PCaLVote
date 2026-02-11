@@ -33,7 +33,7 @@ body{
 </style>
 </head>
 
-<body class="min-h-screen text-gray-700 fade-in">
+<body class="min-h-screen flex flex-col text-gray-700 fade-in">
 
 <script>
 const judgeName = localStorage.getItem("judge");
@@ -62,8 +62,9 @@ if(!judgeName){
   </div>
 </div>
 
-<!-- 🔷 CONTENT -->
-<div class="max-w-3xl mx-auto p-6">
+<!-- 🔷 CONTENT WRAPPER -->
+<div class="flex-grow">
+  <div class="max-w-3xl mx-auto p-6">
 
 <h1 class="text-3xl md:text-4xl font-bold text-center mb-10">
 🗳️ โหวตคะแนนผู้เข้าแข่งขัน
@@ -133,9 +134,15 @@ class="px-10 py-4 bg-green-400 text-white rounded-2xl hover:bg-green-500 transit
 </button>
 </div>
 
-</div>
-</div>
 
+  </div>
+</div>
+  
+  <!-- FOOTER -->
+<footer class="footer mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
+  © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
+</footer>
+  
 <script>
 
 document.getElementById("judgeNameTab").innerText = judgeName;
@@ -317,3 +324,4 @@ loadTable();
 </body>
 
 </html>
+
