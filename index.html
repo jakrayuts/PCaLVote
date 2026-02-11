@@ -12,38 +12,75 @@
 <style>
 body{
   font-family:'Prompt',sans-serif;
+  overflow:hidden;
 }
 
-/* background animation */
-@keyframes gradientMove {
-  0% { background-position: 0% 50% }
-  50% { background-position: 100% 50% }
-  100% { background-position: 0% 50% }
+/* Gradient animation */
+@keyframes gradientMove{
+  0%{background-position:0% 50%}
+  50%{background-position:100% 50%}
+  100%{background-position:0% 50%}
 }
 .animated-bg{
-  background-size: 300% 300%;
-  animation: gradientMove 12s ease infinite;
+  background-size:300% 300%;
+  animation:gradientMove 15s ease infinite;
+}
+
+/* Fade in */
+@keyframes fadeUp{
+  from{opacity:0; transform:translateY(20px)}
+  to{opacity:1; transform:translateY(0)}
+}
+.fade-up{
+  animation:fadeUp 1s ease forwards;
+}
+
+/* Button glow */
+.glow-btn{
+  position:relative;
+  overflow:hidden;
+}
+.glow-btn::before{
+  content:'';
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.5),transparent);
+  transition:0.6s;
+}
+.glow-btn:hover::before{
+  left:100%;
+}
+
+/* Particles */
+canvas{
+  position:absolute;
+  top:0;
+  left:0;
+  z-index:0;
 }
 </style>
 </head>
 
 <body class="min-h-screen flex flex-col animated-bg
-             bg-gradient-to-br from-pink-300 via-purple-300 to-blue-300">
+             bg-gradient-to-br from-pink-400 via-purple-400 to-blue-400">
 
-<div class="flex-grow flex items-center justify-center px-4">
+<canvas id="particles"></canvas>
+
+<div class="relative z-10 flex-grow flex items-center justify-center px-4">
 
 <form onsubmit="login(event)"
-class="w-full max-w-md
-       bg-white/30 backdrop-blur-2xl
+class="fade-up w-full max-w-md
+       bg-white/25 backdrop-blur-3xl
        border border-white/40
-       shadow-2xl rounded-3xl
-       p-6 sm:p-8
-       transition duration-500
-       sm:hover:scale-[1.02]">
+       shadow-[0_20px_60px_rgba(0,0,0,0.25)]
+       rounded-3xl
+       p-6 sm:p-8">
 
-  <!-- Title -->
   <div class="text-center mb-8">
-    <h2 class="text-2xl sm:text-3xl font-semibold text-white drop-shadow-md">
+    <h2 class="text-3xl font-semibold text-white drop-shadow-lg">
       Login
     </h2>
     <p class="text-white/80 text-sm mt-2">
@@ -60,8 +97,7 @@ class="w-full max-w-md
              placeholder-transparent"
       placeholder="Username">
     <label
-      class="absolute left-4 top-2 text-sm text-gray-500
-             transition-all
+      class="absolute left-4 top-2 text-sm text-gray-500 transition-all
              peer-placeholder-shown:top-3.5
              peer-placeholder-shown:text-base
              peer-placeholder-shown:text-gray-400
@@ -81,8 +117,7 @@ class="w-full max-w-md
              placeholder-transparent"
       placeholder="Password">
     <label
-      class="absolute left-4 top-2 text-sm text-gray-500
-             transition-all
+      class="absolute left-4 top-2 text-sm text-gray-500 transition-all
              peer-placeholder-shown:top-3.5
              peer-placeholder-shown:text-base
              peer-placeholder-shown:text-gray-400
@@ -94,11 +129,9 @@ class="w-full max-w-md
 
   <!-- Button -->
   <button id="loginBtn" type="submit"
-    class="w-full py-3 rounded-xl text-white font-medium
-           bg-gradient-to-r from-pink-500 to-purple-500
-           hover:from-pink-600 hover:to-purple-600
-           shadow-lg hover:shadow-xl
-           transition duration-300
+    class="glow-btn w-full py-3 rounded-xl text-white font-medium
+           bg-gradient-to-r from-pink-500 to-purple-600
+           shadow-xl transition duration-300
            flex items-center justify-center gap-2">
 
     <span id="btnText">เข้าสู่ระบบ</span>
@@ -116,10 +149,7 @@ class="w-full max-w-md
 </form>
 </div>
 
-<footer class="mt-auto text-center
-               py-4 sm:py-6
-               text-xs sm:text-sm
-               text-white/80">
+<footer class="relative z-10 mt-auto text-center py-5 text-white/80 text-sm">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
 
@@ -129,17 +159,14 @@ const API="https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvW
 function login(event){
   event.preventDefault();
 
-  const username=username.value.trim();
-  const password=password.value.trim();
+  const username=document.getElementById("username").value.trim();
+  const password=document.getElementById("password").value.trim();
   const btn=document.getElementById("loginBtn");
   const spinner=document.getElementById("spinner");
   const btnText=document.getElementById("btnText");
 
   if(!username||!password){
-    Swal.fire({
-      icon:'warning',
-      title:'กรุณากรอกข้อมูลให้ครบ'
-    });
+    Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูลให้ครบ'});
     return;
   }
 
@@ -152,35 +179,61 @@ function login(event){
   .then(data=>{
     if(data.status==="success"){
       localStorage.setItem("judge",data.judge);
-      Swal.fire({
-        icon:'success',
-        title:'เข้าสู่ระบบสำเร็จ',
-        timer:1200,
-        showConfirmButton:false
-      });
+      Swal.fire({icon:'success',title:'เข้าสู่ระบบสำเร็จ',timer:1200,showConfirmButton:false});
       setTimeout(()=>window.location.href="home.html",1200);
-    }else{
-      throw new Error();
-    }
+    }else throw new Error();
   })
   .catch(()=>{
-    Swal.fire({
-      icon:'error',
-      title:'Login ไม่สำเร็จ',
-      text:'Username หรือ Password ไม่ถูกต้อง'
-    });
+    Swal.fire({icon:'error',title:'Login ไม่สำเร็จ',text:'Username หรือ Password ไม่ถูกต้อง'});
     btn.disabled=false;
     spinner.classList.add("hidden");
     btnText.textContent="เข้าสู่ระบบ";
   });
 }
 
-// Enter behavior
-document.getElementById("username").addEventListener("keydown",e=>{
-  if(e.key==="Enter"){
-    e.preventDefault();
-    document.getElementById("password").focus();
-  }
+/* Particle background */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+
+let particles=[];
+for(let i=0;i<60;i++){
+  particles.push({
+    x:Math.random()*canvas.width,
+    y:Math.random()*canvas.height,
+    r:Math.random()*2+1,
+    d:Math.random()*1
+  });
+}
+
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle="rgba(255,255,255,0.5)";
+  ctx.beginPath();
+  particles.forEach(p=>{
+    ctx.moveTo(p.x,p.y);
+    ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
+  });
+  ctx.fill();
+  update();
+}
+
+function update(){
+  particles.forEach(p=>{
+    p.y+=p.d;
+    if(p.y>canvas.height){
+      p.y=0;
+      p.x=Math.random()*canvas.width;
+    }
+  });
+}
+
+setInterval(draw,33);
+
+window.addEventListener("resize",()=>{
+  canvas.width=window.innerWidth;
+  canvas.height=window.innerHeight;
 });
 </script>
 
