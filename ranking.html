@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -10,20 +11,66 @@
 
 <style>
 body{
-  font-family:'Prompt',sans-serif;
-  background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+    font-family:'Prompt',sans-serif;
+    background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+    overflow-x:hidden;
 }
+
+/* Floating BG */
+body::before{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background: radial-gradient(circle,#d8b4fe,transparent 70%);
+    top:-200px;
+    left:-200px;
+    animation: float1 12s infinite alternate ease-in-out;
+    z-index:-1;
+}
+body::after{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    background: radial-gradient(circle,#93c5fd,transparent 70%);
+    bottom:-200px;
+    right:-200px;
+    animation: float2 15s infinite alternate ease-in-out;
+    z-index:-1;
+}
+
+@keyframes float1{
+    from{transform:translate(0,0);}
+    to{transform:translate(80px,80px);}
+}
+@keyframes float2{
+    from{transform:translate(0,0);}
+    to{transform:translate(-100px,-60px);}
+}
+
+.card{
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    transition: all .3s ease;
+}
+
+@media(min-width:768px){
+.card:hover{
+    transform: translateY(-6px) scale(1.03);
+}
+}
+
 .glass{
-  backdrop-filter: blur(12px);
-  background: rgba(255,255,255,0.7);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.85);
 }
 </style>
 </head>
 
-<body class="min-h-screen flex flex-col text-gray-700">
+<body class="min-h-screen flex flex-col pb-20 md:pb-0 text-gray-700">
 
-<!-- 🔐 LOGIN CHECK -->
 <script>
 const judgeName = localStorage.getItem("judge");
 if(!judgeName){
@@ -31,74 +78,97 @@ if(!judgeName){
 }
 </script>
 
-<!-- 🔷 NAVBAR -->
-<div class="glass px-6 py-4 flex justify-between items-center">
-
-  <!-- กดกลับหน้าหลัก -->
-  <a href="home.html" class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
+<!-- HEADER Desktop -->
+<header class="hidden md:flex glass px-6 py-4 justify-between items-center border-b border-white/40 shadow-sm">
+  <a href="home.html"
+     class="text-xl font-bold text-gray-700 hover:text-purple-600 transition">
     🎓 Back to School Voting
   </a>
 
-  <div class="flex items-center gap-4">
-
-    <div class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+  <div class="flex items-center gap-3">
+    <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm shadow">
       👤 <span id="judgeNameTab"></span>
-    </div>
+    </span>
 
     <button onclick="logout()"
       class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm transition shadow">
       Logout
     </button>
-
   </div>
-</div>
+</header>
 
-   <!-- CONTENT WRAPPER -->
-  <div class="flex-grow">
+<!-- CONTENT -->
+<div class="w-full max-w-6xl mx-auto flex-grow px-4 mt-10 md:mt-20">
 
-<!-- 🔶 TITLE -->
-<div class="text-center mt-10 mb-8">
-  <h1 class="text-4xl font-bold">
+<div class="text-center mb-10">
+  <h1 class="text-2xl md:text-4xl font-bold">
     🏆 ตารางคะแนนรวมแยกฝ่าย
   </h1>
   <p class="text-gray-500 mt-2">อัปเดตคะแนนแบบ Real-Time</p>
 </div>
 
-<!-- 🔷 CONTENT -->
-<div class="grid md:grid-cols-2 gap-10 max-w-6xl mx-auto px-4 pb-16">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
   <!-- 👩 ฝ่ายหญิง -->
-  <div class="glass rounded-3xl p-8">
-    <h2 class="text-2xl font-semibold text-pink-500 mb-6 text-center">
+  <div class="card rounded-3xl p-6">
+    <h2 class="text-xl font-semibold text-pink-500 mb-6 text-center">
       👩 ฝ่ายหญิง
     </h2>
     <div id="femaleBody" class="space-y-4"></div>
   </div>
 
   <!-- 👨 ฝ่ายชาย -->
-  <div class="glass rounded-3xl p-8">
-    <h2 class="text-2xl font-semibold text-blue-500 mb-6 text-center">
+  <div class="card rounded-3xl p-6">
+    <h2 class="text-xl font-semibold text-blue-500 mb-6 text-center">
       👨 ฝ่ายชาย
     </h2>
     <div id="maleBody" class="space-y-4"></div>
   </div>
 
 </div>
-    </div>
+</div>
 
-  <!-- FOOTER -->
-<footer class="footer mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
+<!-- 📱 MOBILE BOTTOM NAV -->
+<nav class="fixed bottom-0 left-0 w-full md:hidden
+            glass border-t border-white/40
+            flex justify-around items-center
+            py-3 text-sm shadow-lg">
+
+<a href="home.html" class="flex flex-col items-center text-gray-600">
+  <span>🏠</span>
+  <span class="text-xs">Home</span>
+</a>
+
+<a href="dashboard.html" class="flex flex-col items-center text-gray-600">
+  <span>📊</span>
+  <span class="text-xs">Dashboard</span>
+</a>
+
+<a href="ranking.html" class="flex flex-col items-center text-purple-600 font-semibold">
+  <span>🏆</span>
+  <span class="text-xs">Ranking</span>
+</a>
+
+<a href="vote.html" class="flex flex-col items-center text-gray-600">
+  <span>📝</span>
+  <span class="text-xs">Vote</span>
+</a>
+
+</nav>
+
+<footer class="hidden md:block mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
 
 <script>
-
 document.getElementById("judgeNameTab").innerText = judgeName;
 
 function logout(){
   localStorage.removeItem("judge");
   window.location.href="index.html";
 }
+</script>
+<script>
 
 const sheetURL="https://script.google.com/macros/s/AKfycbzy7cnkwb6KowYl7U9d9c36WLXZ70AsN7EOW6rTEfjiGQjGFyoVDCYVx0FCur0ILZ54/exec";
 
@@ -172,8 +242,4 @@ setInterval(loadRanking,5000);
 </script>
 
 </body>
-
 </html>
-
-
-
