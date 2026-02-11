@@ -23,8 +23,10 @@
 <body class="min-h-screen flex items-center justify-center 
              bg-gradient-to-br from-pink-200 via-purple-200 to-blue-200">
 
-  <div class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
-              border border-white/40 transition duration-500 hover:scale-105">
+  <!-- เปลี่ยนเป็น FORM -->
+  <form onsubmit="login(event)"
+        class="backdrop-blur-lg bg-white/70 p-8 rounded-3xl shadow-2xl w-96 
+               border border-white/40 transition duration-500 hover:scale-105">
 
     <!-- Title -->
     <div class="text-center mb-6">
@@ -34,7 +36,7 @@
 
     <!-- Username -->
     <div class="mb-4">
-      <input id="username" type="text" placeholder="Username"
+      <input id="username" type="text" placeholder="Username" autofocus
         class="w-full px-4 py-3 rounded-xl border border-pink-200
                focus:outline-none focus:ring-2 focus:ring-pink-300
                bg-white/80 placeholder-gray-400 transition">
@@ -49,7 +51,7 @@
     </div>
 
     <!-- Button -->
-    <button onclick="login()"
+    <button type="submit"
       class="w-full py-3 rounded-xl text-white font-medium
              bg-gradient-to-r from-pink-400 to-purple-400
              hover:from-pink-500 hover:to-purple-500
@@ -58,15 +60,18 @@
       ✨ Login
     </button>
 
-  </div>
+  </form>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
 
-function login() {
+// ฟังก์ชัน Login
+function login(event) {
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  event.preventDefault(); // ป้องกันหน้ารีเฟรช
+
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
 
   if(!username || !password){
     Swal.fire({
@@ -81,7 +86,7 @@ function login() {
   .then(res => res.json())
   .then(data => {
 
-    if (data.status == "success") {
+    if (data.status === "success") {
 
       Swal.fire({
         icon: 'success',
@@ -91,6 +96,7 @@ function login() {
       });
 
       localStorage.setItem("judge", data.judge);
+
       setTimeout(() => {
         window.location.href = "home.html";
       }, 1200);
@@ -104,11 +110,26 @@ function login() {
         confirmButtonColor: '#f472b6'
       });
     }
+  })
+  .catch(() => {
+    Swal.fire({
+      icon: 'error',
+      title: 'เกิดข้อผิดพลาด',
+      text: 'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้'
+    });
   });
 }
+
+
+// 🔹 กด Enter ที่ Username → ไป Password
+document.getElementById("username").addEventListener("keydown", function(e) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    document.getElementById("password").focus();
+  }
+});
+
 </script>
 
 </body>
-
 </html>
-
