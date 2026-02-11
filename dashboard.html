@@ -7,12 +7,31 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
 
+<style>
+body{
+  font-family:'Prompt',sans-serif;
+  background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+}
+.glass{
+  backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.75);
+  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+.fade-in{
+  animation: fadeIn 0.8s ease-in-out;
+}
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+</style>
 </head>
 
-<body class="bg-gradient-to-br from-pink-50 via-purple-50 to-blue-50 min-h-screen">
+<body class="min-h-screen">
 
-<!-- 🔐 ตรวจสอบ login -->
+<!-- 🔐 LOGIN CHECK -->
 <script>
 const judgeName = localStorage.getItem("judge");
 if(!judgeName){
@@ -20,65 +39,61 @@ if(!judgeName){
 }
 </script>
 
-<!-- 🔷 HEADER -->
-<div class="bg-white/70 backdrop-blur-md shadow-md px-6 py-4 flex justify-between items-center">
+<!-- 🔷 NAVBAR -->
+<div class="glass px-6 py-4 flex justify-between items-center">
 
-  <!-- โลโก้กดกลับหน้า home -->
   <a href="home.html"
-     class="text-lg font-semibold text-gray-700 hover:text-purple-500 transition">
+     class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
     🎓 Back to School Voting
   </a>
 
   <div class="flex items-center gap-3">
-
-    <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm">
+    <span class="bg-purple-100 text-purple-700 px-4 py-2 rounded-full text-sm shadow">
       👤 <span id="judgeNameTab"></span>
     </span>
 
     <button onclick="logout()"
-      class="bg-red-300 hover:bg-red-400 text-white px-3 py-2 rounded-lg text-sm">
+      class="bg-red-300 hover:bg-red-400 text-white px-3 py-2 rounded-lg text-sm transition">
       Logout
     </button>
-
   </div>
 
 </div>
 
 <!-- 🔷 CONTENT -->
-<div class="p-6">
+<div class="p-6 fade-in">
 
-<h1 class="text-3xl font-bold text-center mb-10 text-gray-700">
+<h1 class="text-4xl font-bold text-center mb-12 text-gray-700">
 🏆 Dashboard คะแนนรวม 5 กรรมการ
 </h1>
 
-<div class="grid lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+<div class="grid lg:grid-cols-2 gap-10 max-w-7xl mx-auto">
 
-  <!-- ฝ่ายหญิง -->
-  <div class="bg-white rounded-2xl shadow-lg p-6">
-    <h2 class="text-xl font-semibold text-pink-500 mb-4 text-center">👩 ฝ่ายหญิง</h2>
+  <!-- 👩 ฝ่ายหญิง -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-pink-500 mb-6 text-center">👩 ฝ่ายหญิง</h2>
     <canvas id="femaleChart"></canvas>
-    <h3 class="mt-6 font-bold text-center">Top 3</h3>
-    <div id="femaleTop" class="space-y-2 mt-3 text-center"></div>
+
+    <h3 class="mt-8 font-bold text-center text-gray-600">Top 3</h3>
+    <div id="femaleTop" class="space-y-3 mt-4"></div>
   </div>
 
-  <!-- ฝ่ายชาย -->
-  <div class="bg-white rounded-2xl shadow-lg p-6">
-    <h2 class="text-xl font-semibold text-blue-500 mb-4 text-center">👨 ฝ่ายชาย</h2>
+  <!-- 👨 ฝ่ายชาย -->
+  <div class="glass rounded-3xl p-8">
+    <h2 class="text-2xl font-semibold text-blue-500 mb-6 text-center">👨 ฝ่ายชาย</h2>
     <canvas id="maleChart"></canvas>
-    <h3 class="mt-6 font-bold text-center">Top 3</h3>
-    <div id="maleTop" class="space-y-2 mt-3 text-center"></div>
+
+    <h3 class="mt-8 font-bold text-center text-gray-600">Top 3</h3>
+    <div id="maleTop" class="space-y-3 mt-4"></div>
   </div>
 
 </div>
-
 </div>
 
 <script>
 
-// แสดงชื่อกรรมการ
 document.getElementById("judgeNameTab").innerText = judgeName;
 
-// logout
 function logout(){
   localStorage.removeItem("judge");
   window.location.href="login.html";
@@ -90,6 +105,7 @@ let femaleChart, maleChart;
 
 async function loadDashboard(){
 try {
+
 const res = await fetch(sheetURL + "?t=" + new Date().getTime());
 const data = await res.json();
 
@@ -114,15 +130,15 @@ maleScores[contestant] += total;
 
 });
 
-updateSection(femaleScores,"femaleChart","femaleTop","#f472b6");
-updateSection(maleScores,"maleChart","maleTop","#60a5fa");
+updateSection(femaleScores,"femaleChart","femaleTop","#f9a8d4","pink");
+updateSection(maleScores,"maleChart","maleTop","#93c5fd","blue");
 
 } catch(err){
 console.log("ERROR:", err);
 }
 }
 
-function updateSection(scores,chartId,topId,color){
+function updateSection(scores,chartId,topId,color,theme){
 
 let sorted = Object.entries(scores).sort((a,b)=>b[1]-a[1]);
 let labels = sorted.map(x=>"หมายเลข "+x[0]);
@@ -132,9 +148,15 @@ let medals=["🥇","🥈","🥉"];
 let topHTML="";
 
 sorted.slice(0,3).forEach((item,index)=>{
+
+let highlight = index===0
+? "bg-"+theme+"-100 border-2 border-"+theme+"-400 scale-105"
+: "bg-white";
+
 topHTML+=`
-<div class="bg-gray-50 p-2 rounded-lg shadow text-gray-700">
-${medals[index]} หมายเลข ${item[0]} — ${item[1]} คะแนน
+<div class="${highlight} p-4 rounded-xl shadow flex justify-between items-center transition hover:scale-105">
+  <div class="text-lg font-semibold">${medals[index]} หมายเลข ${item[0]}</div>
+  <div class="font-bold text-lg">${item[1]} คะแนน</div>
 </div>`;
 });
 
@@ -155,13 +177,16 @@ datasets:[{
 label:'คะแนนรวม',
 data:values,
 backgroundColor:color,
-borderRadius:8
+borderRadius:12
 }]
 },
 options:{
 responsive:true,
 plugins:{legend:{display:false}},
-scales:{y:{beginAtZero:true}}
+animation:{duration:800},
+scales:{
+y:{beginAtZero:true}
+}
 }
 });
 
