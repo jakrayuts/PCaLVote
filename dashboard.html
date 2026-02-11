@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard คะแนนแยกฝ่าย</title>
+<title>Dashboard คะแนนรวม</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -11,29 +11,68 @@
 
 <style>
 body{
-  font-family:'Prompt',sans-serif;
-  background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+    font-family:'Prompt',sans-serif;
+    background: linear-gradient(135deg,#fdfbfb,#f3e7ff,#e0f2ff);
+    overflow-x:hidden;
+}
+
+/* Floating BG */
+body::before{
+    content:"";
+    position:fixed;
+    width:450px;
+    height:450px;
+    background: radial-gradient(circle,#d8b4fe,transparent 70%);
+    top:-200px;
+    left:-200px;
+    animation: float1 12s infinite alternate ease-in-out;
+    z-index:-1;
+}
+body::after{
+    content:"";
+    position:fixed;
+    width:400px;
+    height:400px;
+    background: radial-gradient(circle,#93c5fd,transparent 70%);
+    bottom:-200px;
+    right:-200px;
+    animation: float2 15s infinite alternate ease-in-out;
+    z-index:-1;
+}
+
+@keyframes float1{
+    from{transform:translate(0,0);}
+    to{transform:translate(80px,80px);}
+}
+@keyframes float2{
+    from{transform:translate(0,0);}
+    to{transform:translate(-100px,-60px);}
+}
+
+/* Card */
+.card{
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.85);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+    transition: all .3s ease;
+}
+
+@media(min-width:768px){
+.card:hover{
+    transform: translateY(-8px) scale(1.03);
+    box-shadow:0 25px 60px rgba(147,51,234,0.2);
+}
 }
 
 .glass{
-  backdrop-filter: blur(14px);
-  background: rgba(255,255,255,0.85);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
-}
-
-.fade-in{
-  animation: fadeIn .8s ease-in-out;
-}
-@keyframes fadeIn{
-  from{opacity:0; transform:translateY(20px);}
-  to{opacity:1; transform:translateY(0);}
+    backdrop-filter: blur(14px);
+    background: rgba(255,255,255,0.85);
 }
 </style>
 </head>
 
 <body class="min-h-screen flex flex-col pb-20 md:pb-0">
 
-<!-- 🔐 LOGIN CHECK -->
 <script>
 const judgeName = localStorage.getItem("judge");
 if(!judgeName){
@@ -41,11 +80,10 @@ if(!judgeName){
 }
 </script>
 
-<!-- 🔷 NAVBAR (Desktop Only) -->
-<div class="hidden md:flex glass px-6 py-4 justify-between items-center">
-
+<!-- HEADER Desktop -->
+<header class="hidden md:flex glass px-6 py-4 justify-between items-center border-b border-white/40 shadow-sm">
   <a href="home.html"
-     class="text-lg font-semibold text-gray-700 hover:text-purple-600 transition">
+     class="text-xl font-bold text-gray-700 hover:text-purple-600 transition">
     🎓 Back to School Voting
   </a>
 
@@ -59,44 +97,40 @@ if(!judgeName){
       Logout
     </button>
   </div>
-</div>
+</header>
 
-<!-- 🔷 CONTENT -->
-<div class="flex-grow px-4 sm:px-6 py-6 sm:py-10 fade-in">
+<!-- CONTENT -->
+<div class="w-full max-w-6xl mx-auto flex-grow px-4 mt-10 md:mt-20">
 
-<h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-center mb-8 sm:mb-12 text-gray-700">
-🏆 Dashboard คะแนนรวม 5 กรรมการ
+<h1 class="text-2xl md:text-4xl font-bold text-center text-gray-700 mb-10">
+📊 Dashboard คะแนนรวม 5 กรรมการ
 </h1>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-10 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
-  <!-- 👩 ฝ่ายหญิง -->
-  <div class="glass rounded-3xl p-4 sm:p-8">
-    <h2 class="text-xl sm:text-2xl font-semibold text-pink-500 mb-4 sm:mb-6 text-center">
-      👩 ฝ่ายหญิง
-    </h2>
+<!-- 👩 ฝ่ายหญิง -->
+<div class="card rounded-3xl p-6">
+  <h2 class="text-xl font-semibold text-pink-500 text-center mb-4">
+    👩 ฝ่ายหญิง
+  </h2>
 
-    <div class="overflow-x-auto">
-      <canvas id="femaleChart" class="max-h-[350px]"></canvas>
-    </div>
+  <canvas id="femaleChart" class="max-h-[300px]"></canvas>
 
-    <h3 class="mt-6 sm:mt-8 font-bold text-center text-gray-600">Top 3</h3>
-    <div id="femaleTop" class="space-y-3 mt-4"></div>
-  </div>
+  <h3 class="mt-6 font-bold text-center text-gray-600">Top 3</h3>
+  <div id="femaleTop" class="space-y-3 mt-4"></div>
+</div>
 
-  <!-- 👨 ฝ่ายชาย -->
-  <div class="glass rounded-3xl p-4 sm:p-8">
-    <h2 class="text-xl sm:text-2xl font-semibold text-blue-500 mb-4 sm:mb-6 text-center">
-      👨 ฝ่ายชาย
-    </h2>
+<!-- 👨 ฝ่ายชาย -->
+<div class="card rounded-3xl p-6">
+  <h2 class="text-xl font-semibold text-blue-500 text-center mb-4">
+    👨 ฝ่ายชาย
+  </h2>
 
-    <div class="overflow-x-auto">
-      <canvas id="maleChart" class="max-h-[350px]"></canvas>
-    </div>
+  <canvas id="maleChart" class="max-h-[300px]"></canvas>
 
-    <h3 class="mt-6 sm:mt-8 font-bold text-center text-gray-600">Top 3</h3>
-    <div id="maleTop" class="space-y-3 mt-4"></div>
-  </div>
+  <h3 class="mt-6 font-bold text-center text-gray-600">Top 3</h3>
+  <div id="maleTop" class="space-y-3 mt-4"></div>
+</div>
 
 </div>
 </div>
@@ -129,7 +163,6 @@ if(!judgeName){
 
 </nav>
 
-<!-- FOOTER Desktop -->
 <footer class="hidden md:block mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
@@ -142,8 +175,6 @@ function logout(){
   window.location.href="index.html";
 }
 </script>
-
-<!-- 🔷 ใช้ JS เดิมของคุณต่อได้เลย -->
 
 <script>
 
@@ -249,10 +280,4 @@ setInterval(loadDashboard,5000);
 </script>
 
 </body>
-
 </html>
-
-
-
-
-
