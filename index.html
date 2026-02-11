@@ -3,162 +3,206 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Judge Scoring - Back to School</title>
+<title>Back to School Voting</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
 
 <style>
-body { font-family: 'Prompt', sans-serif; }
+body{
+    font-family:'Prompt',sans-serif;
+    background: linear-gradient(135deg,#fdfbfb,#ebedee);
+}
+.card{
+    background:white;
+    box-shadow:0 10px 30px rgba(0,0,0,0.05);
+}
+.active-btn{
+    transform:scale(1.05);
+    box-shadow:0 0 0 3px rgba(0,0,0,0.1) inset;
+}
 </style>
 </head>
 
-<body class="bg-gradient-to-br from-slate-900 via-blue-900 to-slate-800 min-h-screen text-gray-800">
+<body class="min-h-screen flex items-center justify-center p-4 text-gray-700">
 
-<div class="max-w-4xl mx-auto bg-white min-h-screen md:min-h-0 md:rounded-3xl md:shadow-2xl p-4 md:p-8">
+<div class="w-full max-w-3xl">
 
-  <!-- Header (เล็กลงบนมือถือ) -->
-  <div class="text-center mb-6 md:mb-8">
-    <h1 class="text-2xl md:text-4xl font-bold text-blue-900">
-      🏫 Back to School
-    </h1>
-    <p class="text-sm md:text-base text-gray-500">
-      ระบบให้คะแนนกรรมการ (ฝ่ายหญิง)
-    </p>
-  </div>
+<h1 class="text-2xl md:text-3xl font-bold text-center mb-6 text-gray-800">
+🎓 Back to School Voting
+</h1>
 
-  <!-- Select -->
-  <div class="space-y-4 md:grid md:grid-cols-2 md:gap-6 md:space-y-0 mb-6">
-    <div>
-      <label class="block font-semibold mb-1 text-sm">กรรมการ</label>
-      <select class="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-400 text-base">
-        <option>กรรมการคนที่ 1</option>
-        <option>กรรมการคนที่ 2</option>
-        <option>กรรมการคนที่ 3</option>
-        <option>กรรมการคนที่ 4</option>
-        <option>กรรมการคนที่ 5</option>
-      </select>
-    </div>
+<!-- เลือกฝ่าย -->
+<div class="flex justify-center gap-4 mb-6">
+<button id="femaleBtn" onclick="setGroup('female')"
+class="px-5 py-2 rounded-xl bg-pink-200 text-pink-800 hover:bg-pink-300 transition">
+👩 ฝ่ายหญิง
+</button>
 
-    <div>
-      <label class="block font-semibold mb-1 text-sm">ผู้เข้าแข่งขัน</label>
-      <select class="w-full p-3 rounded-xl border focus:ring-2 focus:ring-blue-400 text-base">
-        <option>หมายเลข 1</option>
-        <option>หมายเลข 2</option>
-        <option>หมายเลข 3</option>
-        <option>หมายเลข 4</option>
-        <option>หมายเลข 5</option>
-        <option>หมายเลข 6</option>
-        <option>หมายเลข 7</option>
-        <option>หมายเลข 8</option>
-        <option>หมายเลข 9</option>
-        <option>หมายเลข 10</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Score Cards -->
-  <div class="space-y-4 pb-32">
-
-    <!-- Template Card -->
-    <div class="score-item bg-gray-50 p-4 rounded-2xl border shadow-sm" data-max="20">
-      <div class="flex justify-between items-center text-sm md:text-base">
-        <span class="font-semibold">1. Theme "Back to School"</span>
-        <span class="text-gray-500">เต็ม 20</span>
-      </div>
-      <input type="number" min="0" max="20" inputmode="numeric"
-        class="score-input mt-3 w-full p-4 text-center text-xl rounded-xl border focus:ring-2 focus:ring-blue-400">
-    </div>
-
-    <div class="score-item bg-gray-50 p-4 rounded-2xl border shadow-sm" data-max="20">
-      <div class="flex justify-between items-center text-sm md:text-base">
-        <span class="font-semibold">2. ความคิดสร้างสรรค์</span>
-        <span class="text-gray-500">เต็ม 20</span>
-      </div>
-      <input type="number" min="0" max="20" inputmode="numeric"
-        class="score-input mt-3 w-full p-4 text-center text-xl rounded-xl border focus:ring-2 focus:ring-blue-400">
-    </div>
-
-    <div class="bg-blue-50 p-3 rounded-xl font-semibold text-blue-800 text-sm md:text-base">
-      3. การนำเสนอ
-    </div>
-
-    <!-- 15 คะแนน -->
-    <script>
-      const items = [
-        "3.1 ความโดดเด่น",
-        "3.2 ความสามารถพิเศษ",
-        "3.3 บุคลิกภาพ",
-        "3.4 ความมั่นใจ / การเดิน / ตอบคำถาม"
-      ];
-      document.write(items.map(text => `
-        <div class="score-item bg-gray-50 p-4 rounded-2xl border shadow-sm" data-max="15">
-          <div class="flex justify-between items-center text-sm md:text-base">
-            <span class="font-semibold">${text}</span>
-            <span class="text-gray-500">เต็ม 15</span>
-          </div>
-          <input type="number" min="0" max="15" inputmode="numeric"
-            class="score-input mt-3 w-full p-4 text-center text-xl rounded-xl border focus:ring-2 focus:ring-blue-400">
-        </div>
-      `).join(""));
-    </script>
-
-  </div>
+<button id="maleBtn" onclick="setGroup('male')"
+class="px-5 py-2 rounded-xl bg-blue-200 text-blue-800 hover:bg-blue-300 transition">
+👨 ฝ่ายชาย
+</button>
 </div>
 
-<!-- Sticky Bottom Score (เหมาะมากกับมือถือ) -->
-<div class="fixed bottom-0 left-0 right-0 bg-white shadow-2xl border-t p-4">
+<!-- เลือกข้อมูล -->
+<div class="card rounded-2xl p-5 mb-6">
 
-  <div class="max-w-4xl mx-auto">
-    <div class="flex justify-between items-center mb-3">
-      <span class="font-bold text-lg text-yellow-700">🎯 คะแนนรวม</span>
-      <span id="totalScore" class="text-3xl font-bold text-blue-900">0</span>
-    </div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-    <div class="w-full bg-gray-300 rounded-full h-4 overflow-hidden mb-4">
-      <div id="progressBar"
-        class="h-4 bg-gradient-to-r from-green-400 to-green-600 w-0 transition-all duration-300">
-      </div>
-    </div>
+<div>
+<label class="text-sm">ฝ่าย</label>
+<input id="groupDisplay" disabled
+class="w-full mt-1 bg-gray-100 px-3 py-2 rounded-lg">
+</div>
 
-    <button onclick="saveScore()"
-      class="w-full py-4 bg-blue-700 text-white text-lg font-semibold rounded-2xl active:scale-95 transition">
-      ✔ บันทึกคะแนน
-    </button>
-  </div>
+<div>
+<label class="text-sm">หมายเลขผู้ประกวด</label>
+<select id="contestant"
+class="w-full mt-1 bg-gray-100 px-3 py-2 rounded-lg"></select>
+</div>
+
+<div>
+<label class="text-sm">กรรมการ</label>
+<select id="judge"
+class="w-full mt-1 bg-gray-100 px-3 py-2 rounded-lg">
+<option>กรรมการ 1</option>
+<option>กรรมการ 2</option>
+<option>กรรมการ 3</option>
+<option>กรรมการ 4</option>
+<option>กรรมการ 5</option>
+</select>
+</div>
+
+</div>
+</div>
+
+<!-- ตารางคะแนน -->
+<div class="card rounded-2xl p-5">
+
+<div id="scoreTable" class="space-y-4"></div>
+
+<!-- คะแนนรวม -->
+<div class="mt-6">
+<div class="flex justify-between mb-2 font-semibold">
+<span>คะแนนรวม</span>
+<span id="totalScore">0 / 100</span>
+</div>
+
+<div class="w-full bg-gray-200 rounded-full h-3">
+<div id="progressBar"
+class="bg-gradient-to-r from-green-300 to-green-500 h-3 rounded-full transition-all duration-300"
+style="width:0%"></div>
+</div>
+</div>
+
+<!-- ปุ่มบันทึก -->
+<div class="text-center mt-6">
+<button onclick="submitScore()"
+class="px-8 py-3 bg-green-400 text-white rounded-xl hover:bg-green-500 transition">
+✔ บันทึกคะแนน
+</button>
+</div>
+
+</div>
 </div>
 
 <script>
-const inputs = document.querySelectorAll('.score-input');
-const totalEl = document.getElementById('totalScore');
-const progressBar = document.getElementById('progressBar');
 
-function calculateTotal() {
-  let total = 0;
-  inputs.forEach(input => {
-    let value = Number(input.value) || 0;
-    let max = Number(input.max);
-    if (value > max) input.value = max;
-    if (value < 0) input.value = 0;
-    total += Number(input.value) || 0;
-  });
-  totalEl.textContent = total;
-  progressBar.style.width = Math.min(total,100) + "%";
+let currentGroup="";
+
+const criteria=[
+{name:"แต่งกายตาม Theme",max:20},
+{name:"ความคิดสร้างสรรค์",max:20},
+{name:"ความโดดเด่น",max:15},
+{name:"ความสามารถพิเศษ",max:15},
+{name:"บุคลิกภาพ",max:15},
+{name:"ความมั่นใจ / การเดิน / ตอบคำถาม",max:15}
+];
+
+function loadContestants(){
+let html="";
+for(let i=1;i<=10;i++){
+html+=`<option value="${i}">หมายเลข ${i}</option>`;
+}
+document.getElementById("contestant").innerHTML=html;
 }
 
-inputs.forEach(input => {
-  input.addEventListener('input', calculateTotal);
+function loadTable(){
+let html="";
+criteria.forEach((c,i)=>{
+html+=`
+<div class="bg-gray-50 p-4 rounded-xl">
+<div class="flex justify-between text-sm mb-2">
+<span>${i+1}. ${c.name}</span>
+<span>เต็ม ${c.max}</span>
+</div>
+
+<input type="number"
+min="0"
+max="${c.max}"
+step="1"
+inputmode="numeric"
+oninput="validateInput(this)"
+class="scoreInput w-full bg-white border px-3 py-2 rounded-lg text-center text-lg">
+</div>
+`;
 });
-
-function saveScore() {
-  calculateTotal();
-  const total = totalEl.textContent;
-  if (total == 0) {
-    alert("กรุณากรอกคะแนนก่อนบันทึก");
-    return;
-  }
-  alert("บันทึกคะแนนเรียบร้อยแล้ว\nคะแนนรวม: " + total + " คะแนน");
+document.getElementById("scoreTable").innerHTML=html;
 }
+
+function validateInput(input){
+let max=parseInt(input.max);
+let value=parseInt(input.value)||0;
+
+if(value>max){input.value=max;}
+if(value<0){input.value=0;}
+
+calculateTotal();
+}
+
+function calculateTotal(){
+let total=0;
+document.querySelectorAll(".scoreInput").forEach(i=>{
+total+=parseInt(i.value)||0;
+});
+document.getElementById("totalScore").innerText=total+" / 100";
+document.getElementById("progressBar").style.width=total+"%";
+}
+
+function setGroup(group){
+currentGroup=group;
+document.getElementById("groupDisplay").value=
+group==="female"?"ฝ่ายหญิง":"ฝ่ายชาย";
+
+document.getElementById("femaleBtn").classList.remove("active-btn");
+document.getElementById("maleBtn").classList.remove("active-btn");
+
+if(group==="female"){
+document.getElementById("femaleBtn").classList.add("active-btn");
+}else{
+document.getElementById("maleBtn").classList.add("active-btn");
+}
+}
+
+function submitScore(){
+if(currentGroup===""){
+alert("กรุณาเลือกฝ่ายก่อน");
+return;
+}
+
+let total=document.getElementById("totalScore").innerText;
+if(total.startsWith("0")){
+alert("กรุณาใส่คะแนนก่อน");
+return;
+}
+
+alert("บันทึกคะแนนเรียบร้อย\n"+total);
+}
+
+loadContestants();
+loadTable();
+
 </script>
 
 </body>
