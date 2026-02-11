@@ -124,30 +124,38 @@ async function loadRanking(){
 function renderCards(scores,bodyId,color){
 
   let arr = Object.entries(scores)
-  .sort((a,b)=>b[1]-a[1]);
+  .sort((a,b)=>b[1]-a[1])
+  .slice(0,5); // ✅ แสดงแค่ 5 อันดับ
 
-  let medals=["🥇","🥈","🥉"];
+  let medals=["🥇","🥈","🥉","🏅","🏅"]; // เพิ่ม rank 4-5
   let html="";
 
   arr.forEach((item,index)=>{
 
-    let highlight = index < 3 ? "scale-105 bg-"+color+"-50 border-2 border-"+color+"-300" : "bg-white";
+    let highlight = index < 3 
+      ? `scale-105 bg-${color}-50 border-2 border-${color}-300`
+      : "bg-white";
 
     html+=`
     <div class="${highlight} rounded-2xl p-4 flex justify-between items-center shadow transition hover:scale-105">
-      <div class="text-lg font-semibold">
-        ${index<3 ? medals[index] : index+1}
+      
+      <div class="text-lg font-semibold w-10 text-center">
+        ${medals[index] || (index+1)}
       </div>
+
       <div class="text-xl font-bold text-${color}-500">
         หมายเลข ${item[0]}
       </div>
+
       <div class="text-xl font-bold">
         ${item[1]} คะแนน
       </div>
+
     </div>`;
   });
 
   document.getElementById(bodyId).innerHTML = html;
+}
 }
 
 loadRanking();
@@ -156,4 +164,5 @@ setInterval(loadRanking,5000);
 </script>
 
 </body>
+
 </html>
