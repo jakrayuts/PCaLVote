@@ -33,7 +33,7 @@ body{
 </style>
 </head>
 
-<body class="min-h-screen flex flex-col text-gray-700 fade-in">
+<body class="min-h-screen flex flex-col text-gray-700 fade-in pb-24 md:pb-0">
 
 <script>
 const judgeName = localStorage.getItem("judge");
@@ -42,9 +42,10 @@ if(!judgeName){
 }
 </script>
 
-<!-- HEADER -->
-<div class="glass px-6 py-4 flex justify-between items-center">
-  <a href="home.html" class="text-lg font-semibold hover:text-purple-600">
+<!-- HEADER Desktop -->
+<header class="hidden md:flex glass px-6 py-4 justify-between items-center border-b border-white/40 shadow-sm">
+  <a href="home.html"
+     class="text-xl font-bold text-gray-700 hover:text-purple-600 transition">
     🎓 Back to School Voting
   </a>
 
@@ -54,11 +55,11 @@ if(!judgeName){
     </span>
 
     <button onclick="logout()"
-      class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm shadow">
+      class="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm transition shadow">
       Logout
     </button>
   </div>
-</div>
+</header>
 
 <div class="flex-grow">
 <div class="max-w-3xl mx-auto p-6">
@@ -135,7 +136,37 @@ class="px-10 py-4 bg-green-400 text-white rounded-2xl hover:bg-green-500 font-se
 </div>
 </div>
 
-<footer class="mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
+
+<!-- 📱 MOBILE BOTTOM NAV -->
+<nav class="fixed bottom-0 left-0 w-full md:hidden
+            glass border-t border-white/40
+            flex justify-around items-center
+            py-3 text-sm shadow-lg z-50">
+
+<a href="home.html" class="flex flex-col items-center text-gray-600">
+  <span class="text-lg">🏠</span>
+  <span class="text-xs">Home</span>
+</a>
+
+<a href="dashboard.html" class="flex flex-col items-center text-gray-600">
+  <span class="text-lg">📊</span>
+  <span class="text-xs">Dashboard</span>
+</a>
+
+<a href="ranking.html" class="flex flex-col items-center text-gray-600">
+  <span class="text-lg">🏆</span>
+  <span class="text-xs">Ranking</span>
+</a>
+
+<a href="vote.html" class="flex flex-col items-center text-purple-600 font-semibold">
+  <span class="text-lg">📝</span>
+  <span class="text-xs">Vote</span>
+</a>
+
+</nav>
+
+
+<footer class="hidden md:block mt-auto w-full text-center py-6 text-sm text-gray-500 bg-white/50 backdrop-blur-md">
   © 2026 Back to School Event | Developed by Jakrayut Sangbunrueang
 </footer>
 
