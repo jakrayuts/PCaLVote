@@ -159,7 +159,7 @@ const API="https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvW
 function login(event){
   event.preventDefault();
 
-  const username=document.getElementById("username").value.trim();
+  const username=document.getElementById("username").value.trim().toLowerCase();
   const password=document.getElementById("password").value.trim();
   const btn=document.getElementById("loginBtn");
   const spinner=document.getElementById("spinner");
@@ -174,7 +174,7 @@ function login(event){
   spinner.classList.remove("hidden");
   btnText.textContent="กำลังเข้าสู่ระบบ...";
 
-  fetch(`${API}?action=login&username=${username}&password=${password}`)
+  fetch(`${API}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
   .then(res=>res.json())
   .then(data=>{
     if(data.status==="success"){
@@ -239,3 +239,4 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
