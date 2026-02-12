@@ -61,7 +61,27 @@ body{
   margin-left: auto !important;
   margin-right: auto !important;
 }
+/* เอาวงกลมรอบ success ออก */
+.swal2-success-ring {
+  display: none !important;
+}
 
+/* เอาเส้นพื้นหลังวงกลมออก */
+.swal2-success-circular-line-left,
+.swal2-success-circular-line-right {
+  display: none !important;
+}
+
+/* ลบพื้นหลัง icon */
+.swal2-icon.swal2-success {
+  border: none !important;
+  background: transparent !important;
+}
+
+  .swal2-success-line-tip,
+.swal2-success-line-long {
+  background-color: #22c55e !important; /* เขียวแบบ Apple */
+}
 @keyframes appleShow{
   from{opacity:0; transform:scale(0.9);}
   to{opacity:1; transform:scale(1);}
@@ -311,6 +331,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
