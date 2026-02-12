@@ -15,7 +15,7 @@ body{
   overflow:hidden;
 }
 
-/* Gradient animation */
+/* Background animation */
 @keyframes gradientMove{
   0%{background-position:0% 50%}
   50%{background-position:100% 50%}
@@ -26,35 +26,55 @@ body{
   animation:gradientMove 15s ease infinite;
 }
 
-/* Fade in */
+/* Fade */
 @keyframes fadeUp{
   from{opacity:0; transform:translateY(20px)}
   to{opacity:1; transform:translateY(0)}
 }
-.fade-up{
-  animation:fadeUp 1s ease forwards;
+.fade-up{ animation:fadeUp 1s ease forwards; }
+
+/* Apple Ultra SweetAlert */
+.swal2-popup.apple-ultra {
+  border-radius: 24px !important;
+  background: rgba(255,255,255,0.75) !important;
+  backdrop-filter: blur(30px) saturate(180%);
+  -webkit-backdrop-filter: blur(30px) saturate(180%);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+  border: 1px solid rgba(255,255,255,0.6);
+  padding: 2rem;
+  animation: appleShow .25s ease-out;
 }
 
-/* Button glow */
-.glow-btn{
-  position:relative;
-  overflow:hidden;
-}
-.glow-btn::before{
-  content:'';
-  position:absolute;
-  top:0;
-  left:-100%;
-  width:100%;
-  height:100%;
-  background:linear-gradient(120deg,transparent,rgba(255,255,255,0.5),transparent);
-  transition:0.6s;
-}
-.glow-btn:hover::before{
-  left:100%;
+@keyframes appleShow{
+  from{opacity:0; transform:scale(0.9);}
+  to{opacity:1; transform:scale(1);}
 }
 
-/* Particles */
+.swal2-title{
+  font-weight:600 !important;
+  font-size:18px !important;
+  color:#1d1d1f !important;
+}
+
+.swal2-html-container{
+  font-size:14px !important;
+  color:#6e6e73 !important;
+}
+
+.apple-btn{
+  background: linear-gradient(to bottom,#0a84ff,#0066cc);
+  color:white;
+  border:none;
+  padding:8px 22px;
+  border-radius:12px;
+  font-weight:500;
+  transition:0.2s;
+}
+
+.apple-btn:hover{
+  background: linear-gradient(to bottom,#339cff,#007aff);
+}
+
 canvas{
   position:absolute;
   top:0;
@@ -77,7 +97,7 @@ class="fade-up w-full max-w-md
        border border-white/40
        shadow-[0_20px_60px_rgba(0,0,0,0.25)]
        rounded-3xl
-       p-6 sm:p-8">
+       p-8">
 
   <div class="text-center mb-8">
     <h2 class="text-3xl font-semibold text-white drop-shadow-lg">
@@ -88,62 +108,24 @@ class="fade-up w-full max-w-md
     </p>
   </div>
 
-  <!-- Username -->
-  <div class="relative mb-6">
-    <input id="username" type="text" required
-      class="peer w-full px-4 pt-5 pb-2 text-base rounded-xl
-             bg-white/70 border border-white/60
-             focus:outline-none focus:ring-2 focus:ring-pink-300
-             placeholder-transparent"
-      placeholder="Username">
-    <label
-      class="absolute left-4 top-2 text-sm text-gray-500 transition-all
-             peer-placeholder-shown:top-3.5
-             peer-placeholder-shown:text-base
-             peer-placeholder-shown:text-gray-400
-             peer-focus:top-2
-             peer-focus:text-sm
-             peer-focus:text-pink-500">
-      Username
-    </label>
-  </div>
+  <input id="username" type="text" required
+    class="w-full mb-5 px-4 py-3 rounded-xl
+           bg-white/70 border border-white/60
+           focus:outline-none focus:ring-2 focus:ring-blue-400"
+    placeholder="Username">
 
-  <!-- Password -->
-  <div class="relative mb-8">
-    <input id="password" type="password" required
-      class="peer w-full px-4 pt-5 pb-2 text-base rounded-xl
-             bg-white/70 border border-white/60
-             focus:outline-none focus:ring-2 focus:ring-purple-300
-             placeholder-transparent"
-      placeholder="Password">
-    <label
-      class="absolute left-4 top-2 text-sm text-gray-500 transition-all
-             peer-placeholder-shown:top-3.5
-             peer-placeholder-shown:text-base
-             peer-placeholder-shown:text-gray-400
-             peer-focus:top-2
-             peer-focus:text-purple-500">
-      Password
-    </label>
-  </div>
+  <input id="password" type="password" required
+    class="w-full mb-6 px-4 py-3 rounded-xl
+           bg-white/70 border border-white/60
+           focus:outline-none focus:ring-2 focus:ring-blue-400"
+    placeholder="Password">
 
-  <!-- Button -->
   <button id="loginBtn" type="submit"
-    class="glow-btn w-full py-3 rounded-xl text-white font-medium
-           bg-gradient-to-r from-pink-500 to-purple-600
-           shadow-xl transition duration-300
-           flex items-center justify-center gap-2">
+    class="w-full py-3 rounded-xl text-white font-medium
+           bg-gradient-to-r from-blue-500 to-blue-600
+           shadow-xl transition duration-300">
 
     <span id="btnText">เข้าสู่ระบบ</span>
-
-    <svg id="spinner" class="hidden animate-spin h-5 w-5 text-white"
-         xmlns="http://www.w3.org/2000/svg" fill="none"
-         viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10"
-              stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor"
-            d="M4 12a8 8 0 018-8v8H4z"></path>
-    </svg>
   </button>
 
 </form>
@@ -156,42 +138,114 @@ class="fade-up w-full max-w-md
 <script>
 const API="https://script.google.com/macros/s/AKfycbzwSy1VcfUtuWgOtD9pZwpVgYXFvWJ99_ZPw5JLDvmo1uf7vVrCj2hMDnnxLVMwEYGYcg/exec";
 
-function login(event){
-  event.preventDefault();
+const swalApple = Swal.mixin({
+  customClass:{
+    popup:'apple-ultra',
+    confirmButton:'apple-btn'
+  },
+  buttonsStyling:false,
+  backdrop:'rgba(0,0,0,0.35)'
+});
 
-  const username=document.getElementById("username").value.trim().toLowerCase();
-  const password=document.getElementById("password").value.trim();
-  const btn=document.getElementById("loginBtn");
-  const spinner=document.getElementById("spinner");
-  const btnText=document.getElementById("btnText");
+function login(e){
+  e.preventDefault();
 
-  if(!username||!password){
-    Swal.fire({icon:'warning',title:'กรุณากรอกข้อมูลให้ครบ'});
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const loginBtn = document.getElementById("loginBtn");
+  const btnText = document.getElementById("btnText");
+
+  const username = usernameInput.value.trim().toLowerCase();
+  const password = passwordInput.value.trim();
+
+  if(!username || !password){
+    swalApple.fire({
+      title:"กรุณากรอกข้อมูลให้ครบ",
+      confirmButtonText:"ตกลง"
+    });
     return;
   }
 
-  btn.disabled=true;
-  spinner.classList.remove("hidden");
-  btnText.textContent="กำลังเข้าสู่ระบบ...";
+  /* 🔥 Disable ปุ่ม + Spinner ในปุ่ม */
+  loginBtn.disabled = true;
+  loginBtn.classList.add("opacity-80");
+
+  btnText.innerHTML = `
+    <span class="flex items-center justify-center gap-2">
+      <span class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+      กำลังตรวจสอบ...
+    </span>
+  `;
+
+  /* 🔥 Apple Loading Popup */
+  swalApple.fire({
+    title: "กำลังตรวจสอบข้อมูล",
+    html: "กรุณารอสักครู่...",
+    allowOutsideClick: false,
+    showConfirmButton: false,
+    didOpen: () => {
+      Swal.showLoading();
+    }
+  });
 
   fetch(`${API}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
   .then(res=>res.json())
   .then(data=>{
+
+    Swal.close();
+
     if(data.status==="success"){
       localStorage.setItem("judge",data.judge);
-      Swal.fire({icon:'success',title:'เข้าสู่ระบบสำเร็จ',timer:1200,showConfirmButton:false});
-      setTimeout(()=>window.location.href="home.html",1200);
-    }else throw new Error();
+
+      swalApple.fire({
+        icon: "success",
+        title: "เข้าสู่ระบบสำเร็จ",
+        html: `
+          <div class="text-lg mt-2">
+            ยินดีต้อนรับ <b>${data.judge}</b>
+          </div>
+          <div class="text-sm text-gray-500 mt-2">
+            กำลังเข้าสู่หน้าหลักใน <b><span id="countdown">2</span></b> วินาที
+          </div>
+        `,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        allowOutsideClick: false
+      }).then(() => {
+        window.location.href = "home.html";
+      });
+
+    }else{
+      throw new Error();
+    }
+
   })
   .catch(()=>{
-    Swal.fire({icon:'error',title:'Login ไม่สำเร็จ',text:'Username หรือ Password ไม่ถูกต้อง'});
-    btn.disabled=false;
-    spinner.classList.add("hidden");
-    btnText.textContent="เข้าสู่ระบบ";
+
+    Swal.close();
+
+    swalApple.fire({
+      icon:"error",
+      title:"เข้าสู่ระบบไม่สำเร็จ",
+      html:"Username หรือ Password ไม่ถูกต้อง",
+      confirmButtonText:"ลองอีกครั้ง"
+    });
+
+  })
+  .finally(()=>{
+    /* 🔥 คืนค่าปุ่ม */
+    loginBtn.disabled = false;
+    loginBtn.classList.remove("opacity-80");
+    btnText.innerHTML = "เข้าสู่ระบบ";
   });
 }
+/* Spinner animation */
+const style=document.createElement('style');
+style.innerHTML=`@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}`;
+document.head.appendChild(style);
 
-/* Particle background */
+/* Particle */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -216,10 +270,6 @@ function draw(){
     ctx.arc(p.x,p.y,p.r,0,Math.PI*2,true);
   });
   ctx.fill();
-  update();
-}
-
-function update(){
   particles.forEach(p=>{
     p.y+=p.d;
     if(p.y>canvas.height){
@@ -228,7 +278,6 @@ function update(){
     }
   });
 }
-
 setInterval(draw,33);
 
 window.addEventListener("resize",()=>{
@@ -239,4 +288,3 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
-
