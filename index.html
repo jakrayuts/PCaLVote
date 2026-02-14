@@ -246,77 +246,57 @@ function login(e){
     }
   });
 
-  fetch(API, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify({
-    action: "login",
-    username: username,
-    password: password
+  fetch(`${API}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
+  .then(res=>res.json())
+  .then(data=>{
+
+    Swal.close();
+
+    if(data.status==="success"){
+      localStorage.setItem("judge",data.judge);
+
+      swalApple.fire({
+        icon: "success",
+        title: "เข้าสู่ระบบสำเร็จ",
+        html: `
+          <div class="text-lg mt-2">
+            ยินดีต้อนรับ <b>${data.judge}</b>
+          </div>
+          <div class="text-sm text-gray-500 mt-2">
+            กำลังเข้าสู่หน้าหลักใน <b><span id="countdown">2</span></b> วินาที
+          </div>
+        `,
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        allowOutsideClick: false
+      }).then(() => {
+        window.location.href = "home.html";
+      });
+
+    }else{
+      throw new Error();
+    }
+
   })
-})
-.then(res => res.json())
-.then(data => {
+  .catch(()=>{
 
-  Swal.close();
-
-  if(data.status && data.status.toUpperCase() === "SUCCESS"){
-
-    localStorage.setItem("judge",data.judge);
+    Swal.close();
 
     swalApple.fire({
-      icon: "success",
-      title: "เข้าสู่ระบบสำเร็จ",
-      html: `
-        <div class="text-lg mt-2">
-          ยินดีต้อนรับ <b>${data.judge}</b>
-        </div>
-      `,
-      showConfirmButton: false,
-      timer: 1500
-    }).then(() => {
-      window.location.href = "home.html";
+      icon:"error",
+      title:"เข้าสู่ระบบไม่สำเร็จ",
+      html:"Username หรือ Password ไม่ถูกต้อง",
+      confirmButtonText:"ลองอีกครั้ง"
     });
 
-  }else{
-    throw new Error();
-  }
-
-})
-.catch(() => {
-
-  // 🔥 ปิด popup ทุกตัวก่อน
-  Swal.fire().then(() => {});
-  Swal.close();
-
-  setTimeout(() => {
-
-    swalApple.fire({
-      icon: "error",
-      title: "เข้าสู่ระบบไม่สำเร็จ",
-      html: "Username หรือ Password ไม่ถูกต้อง",
-      showConfirmButton: false,
-      timer: 1800,
-      timerProgressBar: true,
-      allowOutsideClick: true
-    });
-
-    // 🔥 เคลียร์ input ทันที ไม่ต้องรอ then()
-    document.getElementById("password").value = "";
-    document.getElementById("username").focus();
-
-  }, 100);
-
-})
-.finally(()=>{
-  loginBtn.disabled = false;
-  loginBtn.classList.remove("opacity-80");
-  btnText.innerHTML = "เข้าสู่ระบบ";
-});
-
-
+  })
+  .finally(()=>{
+    /* 🔥 คืนค่าปุ่ม */
+    loginBtn.disabled = false;
+    loginBtn.classList.remove("opacity-80");
+    btnText.innerHTML = "เข้าสู่ระบบ";
+  });
 }
 /* Spinner animation */
 const style=document.createElement('style');
@@ -366,18 +346,6 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
