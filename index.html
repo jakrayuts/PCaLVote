@@ -289,12 +289,18 @@ function login(e){
   Swal.close();
 
   swalApple.fire({
-    icon:"error",
-    title:"เข้าสู่ระบบไม่สำเร็จ",
-    html:"Username หรือ Password ไม่ถูกต้อง",
-    confirmButtonText:"ลองอีกครั้ง"
+    icon: "error",
+    title: "เข้าสู่ระบบไม่สำเร็จ",
+    html: "Username หรือ Password ไม่ถูกต้อง",
+    showConfirmButton: false,
+    timer: 1800,
+    timerProgressBar: true
   }).then(()=>{
-    window.location.href = "index.html";
+    // เคลียร์ password
+    document.getElementById("password").value = "";
+
+    // โฟกัสกลับช่อง username
+    document.getElementById("username").focus();
   });
 })
 .finally(()=>{
@@ -353,6 +359,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
