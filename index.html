@@ -300,13 +300,7 @@ function login(e){
   btnText.innerHTML = "เข้าสู่ระบบ";
 });
 
-  })
-  .finally(()=>{
-    /* 🔥 คืนค่าปุ่ม */
-    loginBtn.disabled = false;
-    loginBtn.classList.remove("opacity-80");
-    btnText.innerHTML = "เข้าสู่ระบบ";
-  });
+
 }
 /* Spinner animation */
 const style=document.createElement('style');
@@ -356,6 +350,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
