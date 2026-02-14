@@ -294,11 +294,7 @@ function login(e){
     html:"Username หรือ Password ไม่ถูกต้อง",
     confirmButtonText:"ลองอีกครั้ง"
   }).then(()=>{
-    // 🔥 เคลียร์รหัสผ่าน
-    document.getElementById("password").value = "";
-
-    // 🔥 โฟกัสกลับไปที่ช่อง username
-    document.getElementById("username").focus();
+    window.location.href = "index.html";
   });
 })
 .finally(()=>{
@@ -357,6 +353,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
