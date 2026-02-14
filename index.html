@@ -246,52 +246,59 @@ function login(e){
     }
   });
 
-  fetch(`${API}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
-  .then(res=>res.json())
-  .then(data=>{
-
-    Swal.close();
-
-    if(data.status && data.status.toUpperCase() === "SUCCESS"){
-      localStorage.setItem("judge",data.judge);
-
-      swalApple.fire({
-        icon: "success",
-        title: "เข้าสู่ระบบสำเร็จ",
-        html: `
-          <div class="text-lg mt-2">
-            ยินดีต้อนรับ <b>${data.judge}</b>
-          </div>
-          <div class="text-sm text-gray-500 mt-2">
-            กำลังเข้าสู่หน้าหลักใน <b><span id="countdown">1.5</span></b> วินาที
-          </div>
-        `,
-        showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true,
-        allowOutsideClick: false
-      }).then(() => {
-        window.location.href = "home.html";
-      });
-
-    }else{
-      throw new Error();
-    }
-
+  fetch(API, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify({
+    action: "login",
+    username: username,
+    password: password
   })
-  .catch(()=>{
+})
+.then(res => res.json())
+.then(data => {
 
-    Swal.close();
+  Swal.close();
+
+  if(data.status && data.status.toUpperCase() === "SUCCESS"){
+
+    localStorage.setItem("judge",data.judge);
 
     swalApple.fire({
-      icon:"error",
-      title:"เข้าสู่ระบบไม่สำเร็จ",
-      html:"Username หรือ Password ไม่ถูกต้อง",
-      confirmButtonText:"ลองอีกครั้ง",
-        timer: 1500,
-        timerProgressBar: true,
-        allowOutsideClick: false
+      icon: "success",
+      title: "เข้าสู่ระบบสำเร็จ",
+      html: `
+        <div class="text-lg mt-2">
+          ยินดีต้อนรับ <b>${data.judge}</b>
+        </div>
+      `,
+      showConfirmButton: false,
+      timer: 1500
+    }).then(() => {
+      window.location.href = "home.html";
     });
+
+  }else{
+    throw new Error();
+  }
+
+})
+.catch(()=>{
+  Swal.close();
+  swalApple.fire({
+    icon:"error",
+    title:"เข้าสู่ระบบไม่สำเร็จ",
+    html:"Username หรือ Password ไม่ถูกต้อง",
+    confirmButtonText:"ลองอีกครั้ง"
+  });
+})
+.finally(()=>{
+  loginBtn.disabled = false;
+  loginBtn.classList.remove("opacity-80");
+  btnText.innerHTML = "เข้าสู่ระบบ";
+});
 
   })
   .finally(()=>{
@@ -349,6 +356,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
