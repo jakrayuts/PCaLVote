@@ -224,7 +224,6 @@ function login(e){
     return;
   }
 
-  /* 🔥 Disable ปุ่ม + Spinner ในปุ่ม */
   loginBtn.disabled = true;
   loginBtn.classList.add("opacity-80");
 
@@ -235,7 +234,6 @@ function login(e){
     </span>
   `;
 
-  /* 🔥 Apple Loading Popup */
   swalApple.fire({
     title: "กำลังตรวจสอบข้อมูล",
     html: "กรุณารอสักครู่...",
@@ -246,13 +244,25 @@ function login(e){
     }
   });
 
-  fetch(`${API}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`)
-  .then(res=>res.json())
-  .then(data=>{
+  /* ✅ เปลี่ยนเป็น POST */
+  fetch(API, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      action: "login",
+      username: username,
+      password: password
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
 
     Swal.close();
 
-    if(data.status==="success"){
+    if(data.status === "SUCCESS"){
+
       localStorage.setItem("judge",data.judge);
 
       swalApple.fire({
@@ -262,14 +272,9 @@ function login(e){
           <div class="text-lg mt-2">
             ยินดีต้อนรับ <b>${data.judge}</b>
           </div>
-          <div class="text-sm text-gray-500 mt-2">
-            กำลังเข้าสู่หน้าหลักใน <b><span id="countdown">1.5</span></b> วินาที
-          </div>
         `,
         showConfirmButton: false,
-        timer: 1500,
-        timerProgressBar: true,
-        allowOutsideClick: false
+        timer: 1500
       }).then(() => {
         window.location.href = "home.html";
       });
@@ -292,18 +297,13 @@ function login(e){
 
   })
   .finally(()=>{
-    /* 🔥 คืนค่าปุ่ม */
     loginBtn.disabled = false;
     loginBtn.classList.remove("opacity-80");
     btnText.innerHTML = "เข้าสู่ระบบ";
   });
 }
-/* Spinner animation */
-const style=document.createElement('style');
-style.innerHTML=`@keyframes spin{0%{transform:rotate(0)}100%{transform:rotate(360deg)}}`;
-document.head.appendChild(style);
 
-/* Particle */
+/* ===== Particle ===== */
 const canvas=document.getElementById("particles");
 const ctx=canvas.getContext("2d");
 canvas.width=window.innerWidth;
@@ -346,6 +346,7 @@ window.addEventListener("resize",()=>{
 
 </body>
 </html>
+
 
 
 
